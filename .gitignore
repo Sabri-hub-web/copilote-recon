@@ -1,0 +1,13 @@
+# Environnement Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Données personnelles : IP de mes machines, scans réels, souvenirs (exigence R1)
+memoire.json
+donnees/scans_live/*.xml
+.env
+
+# Traces générées à chaque lancement (les traces retenues comme preuves
+# sont copiées dans preuves/ et, elles, versionnées)
+traces/*.json

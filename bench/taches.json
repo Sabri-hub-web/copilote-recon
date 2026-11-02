@@ -1,0 +1,109 @@
+[
+  {
+    "id": "scan_01",
+    "fichier": "donnees/scans_bench/scan_01.xml",
+    "ports_ouverts": [
+      22,
+      80
+    ]
+  },
+  {
+    "id": "scan_02",
+    "fichier": "donnees/scans_bench/scan_02.xml",
+    "ports_ouverts": [
+      80,
+      443,
+      8080
+    ]
+  },
+  {
+    "id": "scan_03",
+    "fichier": "donnees/scans_bench/scan_03.xml",
+    "ports_ouverts": [
+      135,
+      139,
+      445,
+      3389
+    ]
+  },
+  {
+    "id": "scan_04",
+    "fichier": "donnees/scans_bench/scan_04.xml",
+    "ports_ouverts": [
+      22,
+      3306,
+      5432,
+      6379
+    ]
+  },
+  {
+    "id": "scan_05",
+    "fichier": "donnees/scans_bench/scan_05.xml",
+    "ports_ouverts": [
+      21,
+      22,
+      80
+    ]
+  },
+  {
+    "id": "scan_06",
+    "fichier": "donnees/scans_bench/scan_06.xml",
+    "ports_ouverts": [
+      21,
+      22,
+      23,
+      25,
+      53,
+      80,
+      111,
+      139,
+      445,
+      512,
+      513,
+      514,
+      1099,
+      1524,
+      2049,
+      3306,
+      5432,
+      5900,
+      6000,
+      6667,
+      8180
+    ]
+  },
+  {
+    "id": "scan_07",
+    "fichier": "donnees/scans_bench/scan_07.xml",
+    "ports_ouverts": [
+      443
+    ]
+  },
+  {
+    "id": "scan_08",
+    "fichier": "donnees/scans_bench/scan_08.xml",
+    "ports_ouverts": [
+      22,
+      53,
+      123
+    ]
+  },
+  {
+    "id": "scan_09",
+    "fichier": "donnees/scans_bench/scan_09.xml",
+    "ports_ouverts": [
+      2222,
+      8443,
+      9200,
+      27017
+    ]
+  },
+  {
+    "id": "scan_10",
+    "fichier": "donnees/scans_bench/scan_10.xml",
+    "ports_ouverts": [
+      22,
+      3000
+    ]
+  }
+]
