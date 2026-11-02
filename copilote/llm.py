@@ -39,7 +39,7 @@ class ClientLLM:
                               headers=entetes, timeout=config.LLM_TIMEOUT)
         except requests.ConnectionError:
             raise RuntimeError(f"Le modèle ne répond pas sur {self.base_url}. "
-                               "Ollama est-il lancé ? (voir le README)")
+                               "Ollama est-il lancé ? (voir le README)") from None
         r.raise_for_status()
         donnees = r.json()
         return donnees["choices"][0]["message"], donnees.get("usage", {})
