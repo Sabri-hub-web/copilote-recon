@@ -1,0 +1,73 @@
+{
+  "statut": "validee",
+  "reponse": "**Surface d'attaque :**\n- Port 21 (TCP) : FTP - vsftpd 2.3.4\n- Port 22 (TCP) : SSH - OpenSSH 4.7p1 Debian 8ubuntu1\n- Port 80 (TCP) : HTTP - Apache httpd 2.2.8\n\n**Par où commencer :**\n1. **FTP vsftpd 2.3.4** : Version très ancienne, connues pour des vulnérabilités critiques et possible authentification par défaut.\n2. **HTTP Apache 2.2.8** : EOL depuis longtemps, exposition de données potentielles via l'interface web.\n\nPORTS: 21,22,80",
+  "problemes": [],
+  "scan": {
+    "cible": "172.17.0.6",
+    "ports_ouverts": [
+      {
+        "port": 21,
+        "protocole": "tcp",
+        "service": "ftp",
+        "produit": "vsftpd 2.3.4"
+      },
+      {
+        "port": 22,
+        "protocole": "tcp",
+        "service": "ssh",
+        "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+      },
+      {
+        "port": 80,
+        "protocole": "tcp",
+        "service": "http",
+        "produit": "Apache httpd 2.2.8"
+      }
+    ]
+  },
+  "trace": [
+    {
+      "tour": 0,
+      "outil": "lire_scan",
+      "arguments": {
+        "chemin": "donnees/scans_bench/scan_05.xml"
+      },
+      "resultat": {
+        "cible": "172.17.0.6",
+        "ports_ouverts": [
+          {
+            "port": 21,
+            "protocole": "tcp",
+            "service": "ftp",
+            "produit": "vsftpd 2.3.4"
+          },
+          {
+            "port": 22,
+            "protocole": "tcp",
+            "service": "ssh",
+            "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+          },
+          {
+            "port": 80,
+            "protocole": "tcp",
+            "service": "http",
+            "produit": "Apache httpd 2.2.8"
+          }
+        ]
+      }
+    },
+    {
+      "tour": 1,
+      "reponse_modele": "**Surface d'attaque :**\n- Port 21 (TCP) : FTP - vsftpd 2.3.4\n- Port 22 (TCP) : SSH - OpenSSH 4.7p1 Debian 8ubuntu1\n- Port 80 (TCP) : HTTP - Apache httpd 2.2.8\n\n**Par où commencer :**\n1. **FTP vsftpd 2.3.4** : Version très ancienne, connues pour des vulnérabilités critiques et possible authentification par défaut.\n2. **HTTP Apache 2.2.8** : EOL depuis longtemps, exposition de données potentielles via l'interface web.\n\nPORTS: 21,22,80"
+    },
+    {
+      "tour": 1,
+      "verification": "OK"
+    }
+  ],
+  "tokens": {
+    "prompt": 1368,
+    "reponse": 584,
+    "memoire_estimee": 0
+  }
+}

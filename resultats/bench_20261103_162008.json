@@ -1,0 +1,2361 @@
+{
+  "modele": "qwen3.5:4b-q4_K_M",
+  "date": "2026-11-03T15:41:33",
+  "lancements": [
+    {
+      "numero": 1,
+      "details": [
+        {
+          "tache": "scan_01",
+          "vrais_ports": [
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 (TCP) : OpenSSH, version 8.9p1 Ubuntu 3ubuntu0.6\n- Port 80 (TCP) : Apache httpd, version 2.4.52\n\nPar où commencer :\nCommencez par le port 80 en raison de l'ancienneté du service Apache qui expose des risques web potentiels, puis analysez le port 22 pour tester les configurations SSH et l'accès à distance.\n\nPORTS: 22,80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "données/scans_bench/scan_01.xml"
+                },
+                "resultat": {
+                  "erreur": "REFUSÉ par le garde-fou : 'données/scans_bench/scan_01.xml' est hors du dossier donnees/"
+                }
+              },
+              {
+                "tour": 1,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_01.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.2",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1 Ubuntu 3ubuntu0.6"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.4.52"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 2,
+                "reponse_modele": "**1. Surface d'attaque**\nLe scan révèle deux ports ouverts sur la cible 172.17.0.2 :\n- **Port 22 (TCP)** : Service SSH, version OpenSSH 8.9p1 Ubuntu 3ubuntu0.6\n- **Port 80 (TCP)** : Service HTTP, version Apache httpd 2.4.52\n\n**2. Par où commencer**\nLes deux services sont des cibles prioritaires : le **port 22** car c'est le point d'accès système critique, et le **port 80** pour tester les vulnérabilités web classiques (SQLi, XSS) sur Apache. La version OpenSSH est récente mais il faut vérifier les configurations par défaut ; l'Apache 2.4.52 nécessite une vérification des plugins et du contenu.\n\nPORTS: 22, 80"
+              },
+              {
+                "tour": 2,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_02",
+          "vrais_ports": [
+            80,
+            443,
+            8080
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n*   Port 80 (TCP) : HTTP, nginx 1.18.0\n*   Port 443 (TCP) : HTTPS, nginx 1.18.0\n*   Port 8080 (TCP) : HTTP-Proxy, Apache Tomcat 9.0.30\n\nPar où commencer :\nPriorisez les services web sur les ports 80 et 443 pour identifier des applications CMS ou des vulnérabilités du serveur nginx, puis analysez le port 8080 (Apache Tomcat) car les versions Java exposées sont souvent sources de failles JNDI ou de configurations par défaut.\n\nPORTS: 80, 443, 8080"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_02.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.3",
+                  "ports_ouverts": [
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 8080,
+                      "protocole": "tcp",
+                      "service": "http-proxy",
+                      "produit": "Apache Tomcat 9.0.30"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 80 (TCP) : HTTP, nginx 1.18.0\n- Port 443 (TCP) : HTTPS, nginx 1.18.0\n- Port 8080 (TCP) : HTTP-proxy, Apache Tomcat 9.0.30\n\n**Par où commencer :**\nLe port 8080 via Apache Tomcat est le plus critique car ce serveur de traitement d'applications expose souvent des points d'entrée vers l'application web et peut avoir des vulnérabilités spécifiques à la version 9.0.30. Le port 80 (HTTP) mérite aussi une analyse complète pour vérifier les headers, les cookies et les redirections non sécurisées. Le port 443 semble plus protégé mais il faut toujours valider les certificats et le contenu HTTPS pour détecter des failles de chiffrement ou des serveurs mal configurés.\n\nPORTS: 80, 443, 8080"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_03",
+          "vrais_ports": [
+            135,
+            139,
+            445,
+            3389
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 135 : Microsoft Windows RPC\n- Port 139 : Microsoft Windows netbios-ssn\n- Port 445 : Microsoft Windows Server 2016 (microsoft-ds)\n- Port 3389 : Microsoft Terminal Services\n\nPar où commencer :\nCiblez d'abord les services SMB et RPC (135, 139, 445) pour exploiter la gestion de domaine ou trouver des vulnérabilités critiques. Ensuite, accédez au système via RDP (3389).\n\nPORTS: 135, 139, 445, 3389"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_03.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.4",
+                  "ports_ouverts": [
+                    {
+                      "port": 135,
+                      "protocole": "tcp",
+                      "service": "msrpc",
+                      "produit": "Microsoft Windows RPC"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Microsoft Windows netbios-ssn"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "microsoft-ds",
+                      "produit": "Microsoft Windows Server 2016"
+                    },
+                    {
+                      "port": 3389,
+                      "protocole": "tcp",
+                      "service": "ms-wbt-server",
+                      "produit": "Microsoft Terminal Services"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- **Port 135/tcp** : Service `msrpc` (Microsoft Windows RPC)\n- **Port 139/tcp** : Service `netbios-ssn` (Microsoft Windows netbios-ssn)\n- **Port 445/tcp** : Service `microsoft-ds` (Microsoft Windows Server 2016)\n- **Port 3389/tcp** : Service `ms-wbt-server` (Microsoft Terminal Services)\n\n**Par où commencer :**\nLes deux services à exploiter en priorité sont les ports **445** et **3389**.  \n- Le port 445 (`microsoft-ds`) expose le serveur de fichiers et l'authentification Windows, souvent lié à des vulnérabilités critiques (ex. EternalBlue).\n- Le port 3389 (`ms-wbt-server`) permet le accès graphique RDP, un vecteur classique d'évasion ou d'exécution de code.\n\nLes ports 135 et 139 sont liés mais moins directement exploitables pour l'obtention de contrôle immédiat.\n\nPORTS: 135, 139, 445, 3389"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_04",
+          "vrais_ports": [
+            22,
+            3306,
+            5432,
+            6379
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22 : OpenSSH (v7.4)\n- Port 3306 : MySQL (v5.7.33)\n- Port 5432 : PostgreSQL DB (v9.6)\n- Port 6379 : Redis key-value store (v4.0.9)\n\n**Par où commencer :**\n- **Redis (6379)** et **MySQL (3306)** : Ces services de stockage sont prioritaires car ils contiennent des données sensibles, souvent accessibles sans authentification robuste ou avec des versions anciennes contenant des failles connues.\n- **SSH (22)** : À tester ensuite pour vérifier les contrôles d'accès, les identifiants faibles et permettre l'établissement d'une session initiale sur le système.\n\nPORTS: 22,3306,5432,6379"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_04.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.5",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 7.4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.7.33"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 9.6"
+                    },
+                    {
+                      "port": 6379,
+                      "protocole": "tcp",
+                      "service": "redis",
+                      "produit": "Redis key-value store 4.0.9"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "Surface d'attaque :\n- Port 22 : SSH, OpenSSH 7.4\n- Port 3306 : MySQL, version 5.7.33\n- Port 5432 : PostgreSQL DB, version 9.6\n- Port 6379 : Redis key-value store, version 4.0.9\n\nPar où commencer :\nLes bases de données sont les cibles prioritaires. MySQL (3306) et PostgreSQL (5432) sont des services classiques avec d'anciennes versions potentiellement vulnérables. Redis (6379) est souvent exposé sans authentification par défaut. SSH (22) sert plus de tunnel que comme service cible direct, sauf pour accéder aux autres ports.\n\nPORTS: 22, 3306, 5432, 6379"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_05",
+          "vrais_ports": [
+            21,
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nPort 21 : FTP (vsftpd 2.3.4)\nPort 22 : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\nPort 80 : HTTP (Apache httpd 2.2.8)\n\nPar où commencer :\nPrioriser le FTP et l'HTTP. Ces services tournent sur des versions très anciennes connues pour être vulnérables, offrant plus de vecteurs d'exploitation potentiels que SSH.\n\nPORTS: 21, 22, 80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_05.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.6",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 21/TCP : FTP (vsftpd 2.3.4)\n- Port 22/TCP : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- Port 80/TCP : HTTP (Apache httpd 2.2.8)\n\n**Par où commencer :**\nCréer un compte FTP avec des identifiants faibles, car vsftpd 2.3.4 est connu pour avoir des vulnérabilités de sécurité et de stabilité. Établir une connexion SSH vers le serveur, puis effectuer un scan du service Apache pour y détecter les exploitations."
+              },
+              {
+                "tour": 1,
+                "verification": [
+                  "la ligne finale 'PORTS: ...' est absente"
+                ]
+              },
+              {
+                "tour": 2,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 21/TCP : FTP (vsftpd 2.3.4)\n- Port 22/TCP : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- Port 80/TCP : HTTP (Apache httpd 2.2.8)\n\n**Par où commencer :**\nCréer un compte FTP avec des identifiants faibles, car vsftpd 2.3.4 est connu pour avoir des vulnérabilités de sécurité et de stabilité. Établir une connexion SSH vers le serveur, puis effectuer un scan du service Apache pour y détecter les exploitations.\n\nPORTS: 21,22,80"
+              },
+              {
+                "tour": 2,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_06",
+          "vrais_ports": [
+            21,
+            22,
+            23,
+            25,
+            53,
+            80,
+            111,
+            139,
+            445,
+            512,
+            513,
+            514,
+            1099,
+            1524,
+            2049,
+            3306,
+            5432,
+            5900,
+            6000,
+            6667,
+            8180
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :**\nPort 21 - FTP (vsftpd 2.3.4)\nPort 22 - SSH (OpenSSH 4.7p1)\nPort 23 - Telnet (Linux telnetd)\nPort 25 - SMTP (Postfix smtpd)\nPort 53 - DNS (ISC BIND 9.4.2)\nPort 80 - HTTP (Apache httpd 2.2.8)\nPort 111 - RPCbind (rpcbind 2)\nPort 139 - SMB (Samba smbd 3.X - 4.X)\nPort 445 - SMB (Samba smbd 3.0.20-Debian)\nPort 512 - EXEC (netkit-rsh rexecd)\nPort 513 - LOGIN (tcpwrapped)\nPort 514 - TCPWRAPPED (tcpwrapped)\nPort 1099 - RMI (GNU Classpath grmiregistry)\nPort 1524 - BINDSHELL (Metasploitable root shell)\nPort 2049 - NFS (nfs 2-4)\nPort 3306 - MySQL (MySQL 5.0.51a-3ubuntu5)\nPort 5432 - PostgreSQL (PostgreSQL DB 8.3.0 - 8.3.7)\nPort 5900 - VNC (VNC protocol 3.3)\nPort 6000 - X11 (X11)\nPort 6667 - IRC (UnrealIRCd)\nPort 8180 - HTTP (Apache Tomcat/Coyote JSP engine 1.1)\n\n**Par où commencer :**\n1. **Telnet (Port 23)** : L'authentification en clair le rend vulnérable aux attaques d'interception et au vol de mots de passe.\n2. **SMB (Ports 445/139)** : Les versions Samba sont anciennes et souvent exploitées pour l'accès à des fichiers ou la prise de contrôle réseau.\n3. **SSH (Port 22)** : La version OpenSSH 4.7p1 est très ancienne, présentant des risques d'exploitation de failles connues et une gestion de clés faible.\n\nPORTS: 21, 22, 23, 25, 53, 80, 111, 139, 445, 512, 513, 514, 1099, 1524, 2049, 3306, 5432, 5900, 6000, 6667, 8180"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_06.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.7",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1"
+                    },
+                    {
+                      "port": 23,
+                      "protocole": "tcp",
+                      "service": "telnet",
+                      "produit": "Linux telnetd"
+                    },
+                    {
+                      "port": 25,
+                      "protocole": "tcp",
+                      "service": "smtp",
+                      "produit": "Postfix smtpd"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "tcp",
+                      "service": "domain",
+                      "produit": "ISC BIND 9.4.2"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    },
+                    {
+                      "port": 111,
+                      "protocole": "tcp",
+                      "service": "rpcbind",
+                      "produit": "2"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.X - 4.X"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.0.20-Debian"
+                    },
+                    {
+                      "port": 512,
+                      "protocole": "tcp",
+                      "service": "exec",
+                      "produit": "netkit-rsh rexecd"
+                    },
+                    {
+                      "port": 513,
+                      "protocole": "tcp",
+                      "service": "login",
+                      "produit": ""
+                    },
+                    {
+                      "port": 514,
+                      "protocole": "tcp",
+                      "service": "tcpwrapped",
+                      "produit": ""
+                    },
+                    {
+                      "port": 1099,
+                      "protocole": "tcp",
+                      "service": "java-rmi",
+                      "produit": "GNU Classpath grmiregistry"
+                    },
+                    {
+                      "port": 1524,
+                      "protocole": "tcp",
+                      "service": "bindshell",
+                      "produit": "Metasploitable root shell"
+                    },
+                    {
+                      "port": 2049,
+                      "protocole": "tcp",
+                      "service": "nfs",
+                      "produit": "2-4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.0.51a-3ubuntu5"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 8.3.0 - 8.3.7"
+                    },
+                    {
+                      "port": 5900,
+                      "protocole": "tcp",
+                      "service": "vnc",
+                      "produit": "VNC protocol 3.3"
+                    },
+                    {
+                      "port": 6000,
+                      "protocole": "tcp",
+                      "service": "X11",
+                      "produit": ""
+                    },
+                    {
+                      "port": 6667,
+                      "protocole": "tcp",
+                      "service": "irc",
+                      "produit": "UnrealIRCd"
+                    },
+                    {
+                      "port": 8180,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache Tomcat/Coyote JSP engine 1.1"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n\n- Port 21 (FTP) : vsftpd 2.3.4\n- Port 22 (SSH) : OpenSSH 4.7p1\n- Port 23 (Telnet) : Linux telnetd\n- Port 25 (SMTP) : Postfix smtpd\n- Port 53 (DNS) : ISC BIND 9.4.2\n- Port 80 (HTTP) : Apache httpd 2.2.8\n- Port 111 (RPCbind) : version 2\n- Port 139 (NetBIOS) : Samba smbd 3.X - 4.X\n- Port 445 (SMB) : Samba smbd 3.0.20-Debian\n- Port 512 (Exec) : netkit-rsh rexecd\n- Port 513 (Login)\n- Port 514 (TCPWrapped)\n- Port 1099 (Java RMI) : GNU Classpath grmiregistry\n- Port 1524 (Bindshell) : Metasploitable root shell\n- Port 2049 (NFS) : version 2-4\n- Port 3306 (MySQL) : MySQL 5.0.51a-3ubuntu5\n- Port 5432 (PostgreSQL) : PostgreSQL DB 8.3.0 - 8.3.7\n- Port 5900 (VNC) : VNC protocol 3.3\n- Port 6000 (X11)\n- Port 6667 (IRC) : UnrealIRCd\n- Port 8180 (HTTP) : Apache Tomcat/Coyote JSP engine 1.1\n\n**Par où commencer :**\n\n1. **Port 1524 (Bindshell)** - C'est un shell inversé Metasploitable, indique une exploitation déjà faite ou une machine compromise qui pourrait servir de pivot d'attaque.\n\n2. **Ports 3306 et 5432 (MySQL/PostgreSQL)** - Les bases de données sont souvent mal sécurisées par défaut. Avec des versions anciennes comme MySQL 5.0, il y a de fortes chances pour des vulnérabilités connues exploitable à distance.\n\n3. **Port 8180 (Tomcat HTTP)** - Le service web Tomcat avec une version ancienne (JSP engine 1.1) expose potentiellement des failles dans le gestionnaire de sessions et la configuration du serveur."
+              },
+              {
+                "tour": 1,
+                "verification": [
+                  "la ligne finale 'PORTS: ...' est absente"
+                ]
+              },
+              {
+                "tour": 2,
+                "reponse_modele": "**Surface d'attaque :**\n\n- Port 21 : FTP vsftpd 2.3.4\n- Port 22 : SSH OpenSSH 4.7p1\n- Port 23 : Telnet Linux telnetd\n- Port 25 : SMTP Postfix smtpd\n- Port 53 : DNS BIND 9.4.2\n- Port 80 : HTTP Apache httpd 2.2.8\n- Port 111 : RPCbind v2\n- Port 139 : NetBIOS Samba smbd 3.X - 4.X\n- Port 445 : SMB Samba smbd 3.0.20-Debian\n- Port 512 : Exec rexecd\n- Port 513 : Login\n- Port 514 : TCPWrapped\n- Port 1099 : RMI grmiregistry\n- Port 1524 : Bindshell Metasploitable root shell\n- Port 2049 : NFS v2-4\n- Port 3306 : MySQL 5.0.51a\n- Port 5432 : PostgreSQL 8.3.0 - 8.3.7\n- Port 5900 : VNC 3.3\n- Port 6000 : X11\n- Port 6667 : IRC UnrealIRCd\n- Port 8180 : HTTP Tomcat JSP engine 1.1\n\n**Par où commencer :**\n\n1. **Port 1524 (Bindshell)** - Shell inversé Metasploitable, machine probablement déjà compromise et utilisable comme pivot.\n\n2. **Ports 3306 et 5432 (MySQL/PostgreSQL)** - Bases de données avec versions anciennes, vulnérabilités connues potentiellement exploitables à distance.\n\nPORTS: 21,22,23,25,53,80,111,139,445,512,513,514,1099,1524,2049,3306,5432,5900,6000,6667,8180"
+              },
+              {
+                "tour": 2,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_07",
+          "vrais_ports": [
+            443
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque : Le seul port ouvert est le 443, hébergeant https fourni par nginx version 1.24.0.\n\nPar où commencer : Se concentrer sur le service web (port 443) pour tester les vulnérabilités NGINX et vérifier la configuration de sécurité des connexions SSL/TLS, car c'est l'unique vecteur d'accès actif.\n\nPORTS: 443"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_07.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.8",
+                  "ports_ouverts": [
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.24.0"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 443/tcp : HTTPS (nginx 1.24.0)\n\n**Par où commencer :**\nLe seul point d'accès est le port 443 via nginx 1.24.0. Cette version antérieure peut présenter des vulnérabilités connues dans le gestionnaire de sessions ou les headers HTTP. Il faut analyser le contenu HTTPS, vérifier la configuration du serveur et examiner les paramètres de sécurité (TLS versions, chiffrement).\n\nPORTS: 443"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_08",
+          "vrais_ports": [
+            22,
+            53,
+            123
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :**\n*   **Port 22 (tcp)** : ssh / OpenSSH 9.2p1\n*   **Port 53 (udp)** : domain / dnsmasq 2.89\n*   **Port 123 (udp)** : ntp / NTP v4\n\n**Par où commencer :**\n1.  **SSH (Port 22)** : Priorité absolue pour la prise de contrôle directe et l'énumération des utilisateurs.\n2.  **DNS (Port 53)** : Analyser les requêtes DNS pour cartographier le réseau interne ou chercher des vulnérabilités spécifiques à dnsmasq.\n\nPORTS: 22, 53, 123"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_08.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.9",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 9.2p1"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "udp",
+                      "service": "domain",
+                      "produit": "dnsmasq 2.89"
+                    },
+                    {
+                      "port": 123,
+                      "protocole": "udp",
+                      "service": "ntp",
+                      "produit": "NTP v4"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**1. Surface d'attaque :**\n- Port 22 (SSH) : OpenSSH 9.2p1\n- Port 53 (DNS) : dnsmasq 2.89\n- Port 123 (NTP) : NTP v4\n\n**2. Par où commencer :**\n- **Port 22 (SSH)** : C'est l'accès le plus critique pour un contrôle direct du système. Vérifier les configurations d'authentification et rechercher des vulnérabilités OpenSSH connues.\n- **Port 53 (DNS)** : dnsmasq peut être utilisé pour la résolution de noms ou comme serveur DNS intermédiaire. Analyser les requêtes DNS et vérifier s'il y a des redirections suspectes.\n\nPORTS: 22, 53, 123"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_09",
+          "vrais_ports": [
+            2222,
+            8443,
+            9200,
+            27017
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nPort 2222 - SSH (OpenSSH 8.4p1)\nPort 8443 - Jetty HTTPS-alt 9.4.z\nPort 9200 - Elasticsearch REST API 7.10.2\nPort 27017 - MongoDB 4.4.6\n\nPar où commencer :\nCommencez par les ports 9200 et 27017 car ces services d'entreprise sont souvent exposés sans authentification, permettant l'accès aux données sensibles. Le port 2222 est également à tester pour la gestion système si des credentials sont compromises.\n\nPORTS: 2222, 8443, 9200, 27017"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_09.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.10",
+                  "ports_ouverts": [
+                    {
+                      "port": 2222,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.4p1"
+                    },
+                    {
+                      "port": 8443,
+                      "protocole": "tcp",
+                      "service": "https-alt",
+                      "produit": "Jetty 9.4.z"
+                    },
+                    {
+                      "port": 9200,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Elasticsearch REST API 7.10.2"
+                    },
+                    {
+                      "port": 27017,
+                      "protocole": "tcp",
+                      "service": "mongodb",
+                      "produit": "MongoDB 4.4.6"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- **Port 2222/tcp** : SSH (OpenSSH 8.4p1)\n- **Port 8443/tcp** : HTTPS alternative (Jetty 9.4.z)\n- **Port 9200/tcp** : Elasticsearch REST API (7.10.2)\n- **Port 27017/tcp** : MongoDB (4.4.6)\n\n**Par où commencer :**\n1. **MongoDB (27017)** : Base de données non authentifiée par défaut, vulnérabilité fréquente aux injections et exfiltration des données sans mot de passe.\n2. **Elasticsearch (9200)** : Interface REST publique, souvent exposée avec des problèmes d'authentification et permet l'accès à tous les documents par défaut.\n3. **SSH (2222)** : Port alternatif non standard pour SSH, potentiellement plus difficile à scanner mais offre un accès de radeau si le port est bien configuré.\n\nPORTS: 2222,8443,9200,27017"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_10",
+          "vrais_ports": [
+            22,
+            3000
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nPort 22 : SSH (OpenSSH 8.9p1)\nPort 3000 : HTTP (Node.js Express framework)\n\nPar où commencer :\n1. Port 3000 (Les frameworks Node.js exposés sur HTTP sont souvent des cibles pour vulnérabilités web courantes).\n2. Port 22 (L'accès SSH permet de tester la configuration de l'authentification et les permissions d'utilisateur).\n\nPORTS: 22, 3000"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_10.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.11",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1"
+                    },
+                    {
+                      "port": 3000,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Node.js Express framework"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- **Port 22 (TCP)** : ssh – OpenSSH 8.9p1\n- **Port 3000 (TCP)** : http – Node.js Express framework\n\n**Par où commencer :**\n1. **Port 3000 (Express HTTP)** : C'est un service web par défaut, souvent utilisé pour le développement local. Il peut exposer des endpoints administratifs ou des API non sécurisées sans authentification.\n2. **Port 22 (SSH)** : Bien que crypté, OpenSSH 8.9p1 peut présenter des vulnérabilités liées à la configuration ou des faiblesses de gestion des clés si mal configuré.\n\nPORTS: 22,3000"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        }
+      ],
+      "resume": {
+        "seul": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        },
+        "systeme": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        }
+      }
+    },
+    {
+      "numero": 2,
+      "details": [
+        {
+          "tache": "scan_01",
+          "vrais_ports": [
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 (TCP) : SSH, OpenSSH 8.9p1 Ubuntu 3ubuntu0.6\n- Port 80 (TCP) : HTTP, Apache httpd 2.4.52\n\nPar où commencer :\n1. Apache (Port 80) : La version 2.4.52 est ancienne et probablement obsolète, ce qui expose le serveur à des vulnérabilités web connues.\n2. SSH (Port 22) : Permet un accès direct au système, idéal pour tester les méthodes d'authentification ou les configurations de sécurité.\n\nPORTS: 22, 80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_01.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.2",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1 Ubuntu 3ubuntu0.6"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.4.52"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22/tcp : SSH - OpenSSH 8.9p1 Ubuntu 3ubuntu0.6\n- Port 80/tcp : HTTP - Apache httpd 2.4.52\n\n**Par où commencer :**\n1. **Port 80 (HTTP/Apache)** : Version 2.4.52 est un peu ancienne, vérifier les directives de configuration pour des paramètres par défaut sensibles ou des endpoints d'administration.\n2. **Port 22 (SSH/OpenSSH)** : OpenSSH 8.9 avec une version Ubuntu spécifique ; vérifier les configurations SSH (autorisations, clés) et la présence de services supplémentaires masqués si possible.\n\nPORTS: 22,80"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_02",
+          "vrais_ports": [
+            80,
+            443,
+            8080
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 80 : http, nginx/1.18.0\n- Port 443 : https, nginx/1.18.0\n- Port 8080 : http-proxy, Apache Tomcat/9.0.30\n\nPar où commencer :\nCommencez par le port 8080 (Apache Tomcat) car cette version expose des vulnérabilités de sécurité connues et permet souvent un accès direct aux services backend. Ensuite, analysez les ports 80 et 443 (nginx) pour tester la configuration du proxy ou d'éventuelles injections web.\n\nPORTS: 80, 443, 8080"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "données/scans_bench/scan_02.xml"
+                },
+                "resultat": {
+                  "erreur": "REFUSÉ par le garde-fou : 'données/scans_bench/scan_02.xml' est hors du dossier donnees/"
+                }
+              },
+              {
+                "tour": 1,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_02.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.3",
+                  "ports_ouverts": [
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 8080,
+                      "protocole": "tcp",
+                      "service": "http-proxy",
+                      "produit": "Apache Tomcat 9.0.30"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 2,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 80 (TCP) : HTTP → nginx 1.18.0\n- Port 443 (TCP) : HTTPS → nginx 1.18.0\n- Port 8080 (TCP) : HTTP Proxy → Apache Tomcat 9.0.30\n\n**Par où commencer :**\n1. **Port 80/HTTP** : Le service nginx est souvent mis à jour mais peut avoir des vulnérabilités dans certaines configurations. La version 1.18.0 est un point de départ intéressant pour une recherche de CVE connus.\n2. **Port 8080/Tomcat** : Apache Tomcat expose souvent des servlets, des JSP et des gestionnaires de session qui peuvent être vulnérables à des injections ou des faiblesses de configuration. La version 9.0.30 est une cible potentielle pour une analyse plus poussée.\n3. **Port 443/HTTPS** : Bien que moins critique pour le pentest initial, il peut cacher un tunnel SSH ou d'autres services non standard si la configuration est laxiste.\n\nPORTS: 80, 443, 8080"
+              },
+              {
+                "tour": 2,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_03",
+          "vrais_ports": [
+            135,
+            139,
+            445,
+            3389
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nPort 135 (msrpc - Microsoft Windows RPC), Port 139 (netbios-ssn - Microsoft Windows netbios-ssn), Port 445 (microsoft-ds - Microsoft Windows Server 2016), Port 3389 (ms-wbt-server - Microsoft Terminal Services).\n\nPar où commencer :\nPrivilégier le port 445 pour tester les vulnérabilités SMB/Windows Server et le port 3389 pour l'accès RDP, car ces services offrent des vecteurs d'exploitation directe.\n\nPORTS: 135, 139, 445, 3389"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_03.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.4",
+                  "ports_ouverts": [
+                    {
+                      "port": 135,
+                      "protocole": "tcp",
+                      "service": "msrpc",
+                      "produit": "Microsoft Windows RPC"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Microsoft Windows netbios-ssn"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "microsoft-ds",
+                      "produit": "Microsoft Windows Server 2016"
+                    },
+                    {
+                      "port": 3389,
+                      "protocole": "tcp",
+                      "service": "ms-wbt-server",
+                      "produit": "Microsoft Terminal Services"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 135/tcp : Microsoft Windows RPC (v. non spécifiée)\n- Port 139/tcp : Microsoft Windows netbios-ssn (v. non spécifiée)\n- Port 445/tcp : Microsoft Windows Server 2016 microsoft-ds\n- Port 3389/tcp : Microsoft Terminal Services (v. non spécifiée)\n\n**Par où commencer :**\nCommencer par le port **445** (SMB/Windows Server) car c'est une exposition directe à un service Windows Server 2016 avec potentiel d'exploitation de vulnérabilités SMB. Ensuite, aborder le port **3389** (RDP/Terminal Services) car c'est une porte critique pour l'accès graphique et souvent une cible prioritaire si elle n'est pas correctement sécurisée. Les ports 135 et 139 sont liés mais secondaires par rapport aux services de gestion à risque plus élevé.\n\nPORTS: 135, 139, 445, 3389"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_04",
+          "vrais_ports": [
+            22,
+            3306,
+            5432,
+            6379
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque : Les seuls services accessibles sont le SSH (port 22, OpenSSH 7.4), MySQL (port 3306, 5.7.33), PostgreSQL (port 5432, 9.6) et Redis (port 6379, 4.0.9).\n\nPar où commencer : Attaquez d'abord le port 6379 (Redis) puis le 3306 (MySQL). Ces bases de données sont des cibles privilégiées pour l'exfiltration de données sensibles et souvent exposées à des vulnérabilités de configuration par défaut.\n\nPORTS: 22, 3306, 5432, 6379"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_04.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.5",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 7.4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.7.33"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 9.6"
+                    },
+                    {
+                      "port": 6379,
+                      "protocole": "tcp",
+                      "service": "redis",
+                      "produit": "Redis key-value store 4.0.9"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**  \n- Port 22 : OpenSSH 7.4 (SSH)  \n- Port 3306 : MySQL 5.7.33 (MySQL)  \n- Port 5432 : PostgreSQL DB 9.6 (PostgreSQL)  \n- Port 6379 : Redis key-value store 4.0.9 (Redis)  \n\n**Par où commencer :**  \n1. **Redis (6379)** : Souvent exposé sans authentification par défaut, il permet un accès direct aux données et est cible pour des exploits de lecture d'information.  \n2. **MySQL (3306)** : Version 5.7.33 peut présenter des vulnérabilités connues (ex. injection SQL non mitigée) ; la configuration est fréquemment imparfaite.  \n\nPORTS: 22, 3306, 5432, 6379"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_05",
+          "vrais_ports": [
+            21,
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 21 (FTP) - vsftpd 2.3.4\n- Port 22 (SSH) - OpenSSH 4.7p1 Debian 8ubuntu1\n- Port 80 (HTTP) - Apache httpd 2.2.8\n\nPar où commencer :\nPriorisez le FTP (21) car la version 2.3.4 est ancienne et souvent vulnérable, suivie de l'HTTP (80) pour tester les failles du serveur Apache obsolète, avant le SSH (22).\n\nPORTS: 21, 22, 80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_05.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.6",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 21/tcp : FTP, vsftpd 2.3.4\n- Port 22/tcp : SSH, OpenSSH 4.7p1 Debian 8ubuntu1\n- Port 80/tcp : HTTP, Apache httpd 2.2.8\n\n**Par où commencer :**\n1. **FTP (port 21)** : La version vsftpd 2.3.4 est très ancienne (depuis 2014) et connait de nombreuses vulnérabilités connues. C'est le point d'entrée le plus critique pour une exploitation rapide.\n2. **HTTP (port 80)** : Apache 2.2.8 date de 2013, il peut exposer des failles dans le traitement des requêtes ou permettre l'accès à des fichiers sensibles mal protégés.\n\nPORTS: 21,22,80"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_06",
+          "vrais_ports": [
+            21,
+            22,
+            23,
+            25,
+            53,
+            80,
+            111,
+            139,
+            445,
+            512,
+            513,
+            514,
+            1099,
+            1524,
+            2049,
+            3306,
+            5432,
+            5900,
+            6000,
+            6667,
+            8180
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :**\nLes ports ouverts identifiés sont : 21 (ftp vsftpd 2.3.4), 22 (ssh OpenSSH 4.7p1), 23 (telnet Linux telnetd), 25 (smtp Postfix smtpd), 53 (domain ISC BIND 9.4.2), 80 (http Apache httpd 2.2.8), 111 (rpcbind), 139 (netbios-ssn Samba smbd), 445 (netbios-ssn Samba smbd), 512 (exec netkit-rsh rexecd), 513 (login), 514 (tcpwrapped), 1099 (java-rmi GNU Classpath grmiregistry), 1524 (bindshell Metasploitable root shell), 2049 (nfs nfs 2-4), 3306 (mysql MySQL), 5432 (postgresql PostgreSQL DB), 5900 (vnc VNC), 6000 (X11), 6667 (irc UnrealIRCd) et 8180 (http Apache Tomcat).\n\n**Par où commencer :**\n1. Port 1524 : La présence de \"Metasploitable root shell\" indique une machine vulnérable par définition, offrant un accès direct au système.\n2. Ports 3306 & 5432 : Les versions très anciennes (MySQL 5.x et PostgreSQL 8.3) sont connues pour des failles d'authentification ou d'injection de données sensibles.\n3. Port 8180 : Le Tomcat version 1.1 est obsolète et présente de nombreuses vulnérabilités de sécurité web courantes.\n\nPORTS: 21,22,23,25,53,80,111,139,445,512,513,514,1099,1524,2049,3306,5432,5900,6000,6667,8180"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_06.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.7",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1"
+                    },
+                    {
+                      "port": 23,
+                      "protocole": "tcp",
+                      "service": "telnet",
+                      "produit": "Linux telnetd"
+                    },
+                    {
+                      "port": 25,
+                      "protocole": "tcp",
+                      "service": "smtp",
+                      "produit": "Postfix smtpd"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "tcp",
+                      "service": "domain",
+                      "produit": "ISC BIND 9.4.2"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    },
+                    {
+                      "port": 111,
+                      "protocole": "tcp",
+                      "service": "rpcbind",
+                      "produit": "2"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.X - 4.X"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.0.20-Debian"
+                    },
+                    {
+                      "port": 512,
+                      "protocole": "tcp",
+                      "service": "exec",
+                      "produit": "netkit-rsh rexecd"
+                    },
+                    {
+                      "port": 513,
+                      "protocole": "tcp",
+                      "service": "login",
+                      "produit": ""
+                    },
+                    {
+                      "port": 514,
+                      "protocole": "tcp",
+                      "service": "tcpwrapped",
+                      "produit": ""
+                    },
+                    {
+                      "port": 1099,
+                      "protocole": "tcp",
+                      "service": "java-rmi",
+                      "produit": "GNU Classpath grmiregistry"
+                    },
+                    {
+                      "port": 1524,
+                      "protocole": "tcp",
+                      "service": "bindshell",
+                      "produit": "Metasploitable root shell"
+                    },
+                    {
+                      "port": 2049,
+                      "protocole": "tcp",
+                      "service": "nfs",
+                      "produit": "2-4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.0.51a-3ubuntu5"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 8.3.0 - 8.3.7"
+                    },
+                    {
+                      "port": 5900,
+                      "protocole": "tcp",
+                      "service": "vnc",
+                      "produit": "VNC protocol 3.3"
+                    },
+                    {
+                      "port": 6000,
+                      "protocole": "tcp",
+                      "service": "X11",
+                      "produit": ""
+                    },
+                    {
+                      "port": 6667,
+                      "protocole": "tcp",
+                      "service": "irc",
+                      "produit": "UnrealIRCd"
+                    },
+                    {
+                      "port": 8180,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache Tomcat/Coyote JSP engine 1.1"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\nLes ports ouverts sont : 21 (FTP vsftpd 2.3.4), 22 (SSH OpenSSH 4.7p1), 23 (Telnet Linux telnetd), 25 (SMTP Postfix smtpd), 53 (DNS ISC BIND 9.4.2), 80 (HTTP Apache httpd 2.2.8), 111 (RPCbind 2), 139 (NetBIOS Samba smbd), 445 (NetBIOS Samba smbd 3.0.20-Debian), 512 (Exec netkit-rsh rexecd), 513 (Login), 514 (tcpwrapped), 1099 (Java RMI GNU Classpath grmiregistry), 1524 (Bindshell Metasploitable root shell), 2049 (NFS 2-4), 3306 (MySQL MySQL 5.0.51a-3ubuntu5), 5432 (PostgreSQL PostgreSQL DB 8.3.0 - 8.3.7), 5900 (VNC VNC protocol 3.3), 6000 (X11), 6667 (IRC UnrealIRCd), 8180 (HTTP Apache Tomcat/Coyote JSP engine 1.1).\n\n**Par où commencer :**\nCommencer par le port 23 (Telnet) car c'est un protocole obsolète et très peu sécurisé, souvent exploitable avec des exploits simples. Ensuite explorer le port 1524 (Bindshell Metasploitable root shell) qui indique la présence d'une backdoor active, facilitant l'accès non autorisé direct à la machine.\n\nPORTS: 21,22,23,25,53,80,111,139,445,512,513,514,1099,1524,2049,3306,5432,5900,6000,6667,8180"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_07",
+          "vrais_ports": [
+            443
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :** Port 443 : https (nginx version 1.24.0).\n\n**Par où commencer :** Le service HTTPS est le seul accès actif disponible. Se concentrer sur les vulnérabilités spécifiques au serveur Nginx 1.24.0 (ex: injection, SSRF) car c'est l'unique point d'entrée exploitable dans ce scan.\n\nPORTS: 443"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_07.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.8",
+                  "ports_ouverts": [
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.24.0"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 443 (TCP) : Service https, version nginx 1.24.0\n\n**Par où commencer :**\nLe seul port accessible étant le HTTPS sur nginx, il faut commencer par l'analyse du trafic SSL/TLS et des headers HTTP pour identifier les vulnérabilités potentielles dans la configuration de NGINX. La version 1.24.0 est récente mais peut présenter des différences d'implémentation avec les versions plus anciennes qui sont souvent plus vulnérables.\n\nPORTS: 443"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_08",
+          "vrais_ports": [
+            22,
+            53,
+            123
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**Surface d'attaque :**\n*   Port 22 (TCP) : SSH, OpenSSH 9.2p1\n*   Port 53 (UDP) : DNS, dnsmasq 2.89\n*   Port 123 (UDP) : NTP, NTP v4\n\n**Par où commencer :**\n1.  **Port 22 (SSH)** : Prioritaire pour tester les vulnérabilités SSH et l'exploitation directe du shell, car c'est l'accès principal au système d'exploitation.\n2.  **Port 53 (DNS)** : À étudier pour vérifier la configuration de dnsmasq (ex: zone transfers) et mapper le réseau local à partir des réponses DNS.\n\nPORTS: 22, 53, 123"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_08.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.9",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 9.2p1"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "udp",
+                      "service": "domain",
+                      "produit": "dnsmasq 2.89"
+                    },
+                    {
+                      "port": 123,
+                      "protocole": "udp",
+                      "service": "ntp",
+                      "produit": "NTP v4"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22 (TCP) : SSH - OpenSSH 9.2p1\n- Port 53 (UDP) : DNS - dnsmasq 2.89\n- Port 123 (UDP) : NTP - NTP v4\n\n**Par où commencer :**\nCommencher par l'analyse du service SSH car il est utilisé pour la gestion à distance et peut présenter des vulnérabilités de configuration fréquentes. Ensuite, examiner DNS car dnsmasq a été largement utilisé dans les attaques DDoS (DNS amplification) et peut être compromis pour rediriger le trafic. Le NTP est le moins critique mais ne doit pas être négligé car certaines versions ont connu des vulnérabilités permettant l'exfiltration d'hôtes temps.\n\nPORTS: 22, 53, 123"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_09",
+          "vrais_ports": [
+            2222,
+            8443,
+            9200,
+            27017
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 2222 : SSH (OpenSSH 8.4p1)\n- Port 8443 : Jetty/https-alt (Jetty 9.4.z)\n- Port 9200 : Elasticsearch REST API (Elasticsearch 7.10.2)\n- Port 27017 : MongoDB (MongoDB 4.4.6)\n\nPar où commencer :\n1. MongoDB (27017) : Version 4.4.6 souvent dépourvue d'authentification par défaut, risque critique de fuite de données.\n2. Elasticsearch (9200) : API REST publique potentielle, version 7.10.2 peut exposer des infos sensibles sans protection.\n3. SSH (2222) : Interface standard pour la connexion et énumération des comptes à distance.\n\nPORTS: 2222, 8443, 9200, 27017"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_09.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.10",
+                  "ports_ouverts": [
+                    {
+                      "port": 2222,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.4p1"
+                    },
+                    {
+                      "port": 8443,
+                      "protocole": "tcp",
+                      "service": "https-alt",
+                      "produit": "Jetty 9.4.z"
+                    },
+                    {
+                      "port": 9200,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Elasticsearch REST API 7.10.2"
+                    },
+                    {
+                      "port": 27017,
+                      "protocole": "tcp",
+                      "service": "mongodb",
+                      "produit": "MongoDB 4.4.6"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 2222/tcp : ssh / OpenSSH 8.4p1\n- Port 8443/tcp : https-alt / Jetty 9.4.z\n- Port 9200/tcp : http / Elasticsearch REST API 7.10.2\n- Port 27017/tcp : mongodb / MongoDB 4.4.6\n\n**Par où commencer :**\n1. **MongoDB (27017)** : Base de données avec par défaut un utilisateur root accessible, risque élevé d'exfiltration directe des données.\n2. **Elasticsearch (9200)** : Service de recherche très exposé, indexation possible de données sensibles et vulnérabilités connues dans certaines versions 7.x.\n3. **SSH (2222)** : Accès root potentiel si les règles SSH ne sont pas strictes, porte non standard mais accessible.\n\nPORTS: 2222, 8443, 9200, 27017"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_10",
+          "vrais_ports": [
+            22,
+            3000
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 : SSH (OpenSSH 8.9p1)\n- Port 3000 : HTTP (Node.js Express framework)\n\nPar où commencer :\n1. Port 3000 : Lancer l'exploitation sur l'application web pour tester les failles de logique ou injection.\n2. Port 22 : Vérifier la configuration du serveur SSH et des versions OpenSSH.\n\nPORTS: 22, 3000"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_10.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.11",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1"
+                    },
+                    {
+                      "port": 3000,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Node.js Express framework"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22 (TCP) : SSH, OpenSSH 8.9p1\n- Port 3000 (TCP) : HTTP, Node.js Express framework\n\n**Par où commencer :**\n1. Le port 3000 (Node.js Express) : Les frameworks Node.js ont souvent des vulnérabilités liées à l'interprétation de code ou des failles dans le framework lui-même, c'est un point d'entrée dynamique.\n2. Le port 22 (SSH) : Vérifier si la version OpenSSH est susceptible de contenir des exploitations connues (OpenSSH passe parfois en mode « très sûr » si mal configuré).\n\nPORTS: 22, 3000"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        }
+      ],
+      "resume": {
+        "seul": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        },
+        "systeme": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        }
+      }
+    },
+    {
+      "numero": 3,
+      "details": [
+        {
+          "tache": "scan_01",
+          "vrais_ports": [
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 (TCP) : SSH / OpenSSH 8.9p1 Ubuntu 3ubuntu0.6\n- Port 80 (TCP) : HTTP / Apache httpd 2.4.52\n\nPar où commencer :\nCommencez par le port 22 pour auditer les configurations SSH et les risques d'exploitation des connexions, puis analysez le port 80 pour identifier des vulnérabilités potentielles sur le serveur web Apache.\n\nPORTS: 22, 80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_01.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.2",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1 Ubuntu 3ubuntu0.6"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.4.52"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**  \nLes ports ouverts sur la cible 172.17.0.2 sont :  \n- **Port 22/TCP** : SSH (OpenSSH 8.9p1 Ubuntu 3ubuntu0.6)  \n- **Port 80/TCP** : HTTP (Apache httpd 2.4.52)  \n\n**Par où commencer :**  \n1. **SSH (port 22)** : Prioritaire car le service de gestion à distance peut offrir un accès privilégié si une faille est exploitée. La version OpenSSH 8.9p1 est récente mais mérite vérification des configurations et des mises à jour de sécurité.  \n2. **HTTP (port 80)** : Secondaire mais critique car les serveurs web sont souvent exposés à des vulnérabilités classiques (mis en veille, failles dans le cache, injection). La version Apache 2.4.52 est une version stable, mais nécessite un audit pour détecter des problèmes de configuration ou d’exploitation.  \n\nLes deux services doivent être audités car ils représentent les vecteurs d’accès principaux à cette machine.  \n\nPORTS: 22,80"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_02",
+          "vrais_ports": [
+            80,
+            443,
+            8080
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 80 : HTTP (nginx 1.18.0)\n- Port 443 : HTTPS (nginx 1.18.0)\n- Port 8080 : Apache Tomcat 9.0.30\n\nPar où commencer :\n1. Apache Tomcat (8080) : La version 9.0.30 peut présenter des vulnérabilités spécifiques liées à la gestion de session ou au SMI.\n2. Nginx (443/80) : Auditer le contenu web et vérifier les configurations SSL, ainsi que la présence de CMS intégrés.\n\nPORTS: 80, 443, 8080"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_02.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.3",
+                  "ports_ouverts": [
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.18.0"
+                    },
+                    {
+                      "port": 8080,
+                      "protocole": "tcp",
+                      "service": "http-proxy",
+                      "produit": "Apache Tomcat 9.0.30"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 80 : HTTP (nginx 1.18.0)\n- Port 443 : HTTPS (nginx 1.18.0)\n- Port 8080 : HTTP Proxy (Apache Tomcat 9.0.30)\n\n**Par où commencer :**\n1. **Port 8080 (Tomcat)** : C'est le service le plus critique car les versions de Tomcat ont été historiquement vulnérables à des RCE. Les applications Java sont souvent mal patchées.\n2. **Port 443 (HTTPS)** : Bien que moins accessible, c'est le canal d'entrée privilégié pour exfiltrer ou modifier le trafic. Il faut vérifier les headers SSL et la version exacte de l'agrégation.\n\nPORTS: 80, 443, 8080"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_03",
+          "vrais_ports": [
+            135,
+            139,
+            445,
+            3389
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 135/tcp : Microsoft Windows RPC\n- Port 139/tcp : Microsoft Windows netbios-ssn\n- Port 445/tcp : Microsoft Windows Server 2016 microsoft-ds\n- Port 3389/tcp : Microsoft Terminal Services\n\nPar où commencer :\nCommencez par le port 445 (SMB) pour énumérer les partages et vérifier la présence d'exploits connus, puis exploitez le port 3389 (RDP) pour obtenir un accès direct sur la console Windows.\n\nPORTS: 135, 139, 445, 3389"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_03.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.4",
+                  "ports_ouverts": [
+                    {
+                      "port": 135,
+                      "protocole": "tcp",
+                      "service": "msrpc",
+                      "produit": "Microsoft Windows RPC"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Microsoft Windows netbios-ssn"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "microsoft-ds",
+                      "produit": "Microsoft Windows Server 2016"
+                    },
+                    {
+                      "port": 3389,
+                      "protocole": "tcp",
+                      "service": "ms-wbt-server",
+                      "produit": "Microsoft Terminal Services"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 135/tcp : msrpc (Microsoft Windows RPC)\n- Port 139/tcp : netbios-ssn (Microsoft Windows netbios-ssn)\n- Port 445/tcp : microsoft-ds (Microsoft Windows Server 2016)\n- Port 3389/tcp : ms-wbt-server (Microsoft Terminal Services)\n\n**Par où commencer :**\nCommencer par le port 445 et 3389 car ce sont les services les plus critiques. Le SMB (445) permet un accès direct aux partages de fichiers et dossiers Windows, tandis que RDP (3389) offre une console de gestion complète du système. Ces deux ports ouvrent des vecteurs d'attaque importants pour l'échappement et le contrôle distant.\n\nPORTS: 135, 139, 445, 3389"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_04",
+          "vrais_ports": [
+            22,
+            3306,
+            5432,
+            6379
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "**1. Surface d'attaque :**\n*   Port 22 : SSH (OpenSSH 7.4)\n*   Port 3306 : MySQL (MySQL 5.7.33)\n*   Port 5432 : PostgreSQL (PostgreSQL 9.6)\n*   Port 6379 : Redis (Redis 4.0.9)\n\n**2. Par où commencer :**\nIl faut d'abord cibler les bases de données (MySQL et PostgreSQL) puis le service Redis. Les versions 5.7.33, 9.6 et surtout 4.0.9 sont anciennes et souvent dépourvues de protections par défaut, ce qui permet une connexion directe ou l'exfiltration de données sensibles via des vulnérabilités connues.\n\nPORTS: 22,3306,5432,6379"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_04.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.5",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 7.4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.7.33"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 9.6"
+                    },
+                    {
+                      "port": 6379,
+                      "protocole": "tcp",
+                      "service": "redis",
+                      "produit": "Redis key-value store 4.0.9"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22 : SSH OpenSSH 7.4\n- Port 3306 : MySQL 5.7.33\n- Port 5432 : PostgreSQL DB 9.6\n- Port 6379 : Redis key-value store 4.0.9\n\n**Par où commencer :**\n1. **Redis (6379)** : Store key-value souvent déployé sans authentification, très exposé aux attaques de lecture/écriture non autorisée.\n2. **MySQL (3306)** : Version 5.7.33 peut avoir des vulnérabilités connues (SQL injection, injection de commandes) permettant une prise de contrôle du serveur.\n3. **PostgreSQL (5432)** : Version 9.6 pourrait présenter des failles similaires à MySQL, offrant un accès complet aux données si le service est mal configuré.\n\nPORTS: 22, 3306, 5432, 6379"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_05",
+          "vrais_ports": [
+            21,
+            22,
+            80
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 21 : FTP (vsftpd 2.3.4)\n- Port 22 : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- Port 80 : HTTP (Apache httpd 2.2.8)\n\nPar où commencer :\n1. **Port 21 (FTP)** : Version obsolète avec de nombreuses vulnérabilités connues exploitable par des attaques par force brute ou exploitation directe.\n2. **Port 80 (HTTP)** : Serveur Apache ancien susceptible d'exposer des failles web, des backdoors ou des configurations mal sécurisées.\n\nPORTS: 21, 22, 80"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_05.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.6",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n\n- **Port 21 (FTP)** : Service FTP, produit vsftpd 2.3.4\n- **Port 22 (SSH)** : Service SSH, produit OpenSSH 4.7p1 Debian 8ubuntu1\n- **Port 80 (HTTP)** : Service HTTP, produit Apache httpd 2.2.8\n\n**Par où commencer :**\n\n1. **FTP (port 21)** : La version vsftpd 2.3.4 est très ancienne et comporte de nombreuses vulnérabilités connues. C'est le point d'entrée le plus critique avec un risque élevé d'exploitation facile.\n\n2. **SSH (port 22)** : OpenSSH 4.7p1 est également ancien (version Debian 8ubuntu1, EOL depuis longtemps). Bien que plus sécurisé que FTP, il reste une porte d'accès à distance directe si les credentials sont compromis.\n\nLes deux services doivent être audités immédiatement car ils sont obsolètes et exposés sans indication de chiffrement récent ou patchs appliqués."
+              },
+              {
+                "tour": 1,
+                "verification": [
+                  "la ligne finale 'PORTS: ...' est absente"
+                ]
+              },
+              {
+                "tour": 2,
+                "reponse_modele": "**Surface d'attaque :**\n\n- **Port 21** : FTP (vsftpd 2.3.4)\n- **Port 22** : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- **Port 80** : HTTP (Apache httpd 2.2.8)\n\n**Par où commencer :**\n\n1. **FTP (port 21)** : Version très ancienne, vulnérabilités connues abondantes, risque d'exploitation direct.\n2. **SSH (port 22)** : Version EOL, porte de contrôle d'accès à distance.\n\nPORTS: 21, 22, 80"
+              },
+              {
+                "tour": 2,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_06",
+          "vrais_ports": [
+            21,
+            22,
+            23,
+            25,
+            53,
+            80,
+            111,
+            139,
+            445,
+            512,
+            513,
+            514,
+            1099,
+            1524,
+            2049,
+            3306,
+            5432,
+            5900,
+            6000,
+            6667,
+            8180
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nVoici les ports ouverts détectés avec leurs services et versions :\n- Port 21 (vsftpd 2.3.4)\n- Port 22 (OpenSSH 4.7p1)\n- Port 23 (Linux telnetd)\n- Port 25 (Postfix smtpd)\n- Port 53 (ISC BIND 9.4.2)\n- Port 80 (Apache httpd 2.2.8)\n- Port 111 (rpcbind 2)\n- Port 139 (Samba smbd)\n- Port 445 (Samba smbd 3.0.20-Debian)\n- Port 512 (netkit-rsh rexecd)\n- Port 513 (login)\n- Port 514 (tcpwrapped)\n- Port 1099 (GNU Classpath grmiregistry)\n- Port 1524 (Metasploitable root shell)\n- Port 2049 (NFS version 2-4)\n- Port 3306 (MySQL 5.0.51a-3ubuntu5)\n- Port 5432 (PostgreSQL DB)\n- Port 5900 (VNC protocol 3.3)\n- Port 6000 (X11)\n- Port 6667 (UnrealIRCd)\n- Port 8180 (Apache Tomcat/Coyote JSP engine 1.1)\n\nPar où commencer :\n1. Port 1524 : Cible prioritaire absolue, le service indique explicitement \"Metasploitable root shell\", suggérant un accès système complet ou une machine dédiée au test vulnérabilité.\n2. Ports 23 et 21 : Les protocoles FTP/Telnet sont non chiffrés par défaut, offrant des opportunités immédiates pour le vol de mots de passe en clair.\n3. Port 445/139 : Samba expose des partages réseau vulnérables aux exploits SMB (SMBv1), permettant souvent une prise de contrôle ou transfert de fichiers non autorisé.\n\nPORTS: 21,22,23,25,53,80,111,139,445,512,513,514,1099,1524,2049,3306,5432,5900,6000,6667,8180"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_06.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.7",
+                  "ports_ouverts": [
+                    {
+                      "port": 21,
+                      "protocole": "tcp",
+                      "service": "ftp",
+                      "produit": "vsftpd 2.3.4"
+                    },
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 4.7p1"
+                    },
+                    {
+                      "port": 23,
+                      "protocole": "tcp",
+                      "service": "telnet",
+                      "produit": "Linux telnetd"
+                    },
+                    {
+                      "port": 25,
+                      "protocole": "tcp",
+                      "service": "smtp",
+                      "produit": "Postfix smtpd"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "tcp",
+                      "service": "domain",
+                      "produit": "ISC BIND 9.4.2"
+                    },
+                    {
+                      "port": 80,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache httpd 2.2.8"
+                    },
+                    {
+                      "port": 111,
+                      "protocole": "tcp",
+                      "service": "rpcbind",
+                      "produit": "2"
+                    },
+                    {
+                      "port": 139,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.X - 4.X"
+                    },
+                    {
+                      "port": 445,
+                      "protocole": "tcp",
+                      "service": "netbios-ssn",
+                      "produit": "Samba smbd 3.0.20-Debian"
+                    },
+                    {
+                      "port": 512,
+                      "protocole": "tcp",
+                      "service": "exec",
+                      "produit": "netkit-rsh rexecd"
+                    },
+                    {
+                      "port": 513,
+                      "protocole": "tcp",
+                      "service": "login",
+                      "produit": ""
+                    },
+                    {
+                      "port": 514,
+                      "protocole": "tcp",
+                      "service": "tcpwrapped",
+                      "produit": ""
+                    },
+                    {
+                      "port": 1099,
+                      "protocole": "tcp",
+                      "service": "java-rmi",
+                      "produit": "GNU Classpath grmiregistry"
+                    },
+                    {
+                      "port": 1524,
+                      "protocole": "tcp",
+                      "service": "bindshell",
+                      "produit": "Metasploitable root shell"
+                    },
+                    {
+                      "port": 2049,
+                      "protocole": "tcp",
+                      "service": "nfs",
+                      "produit": "2-4"
+                    },
+                    {
+                      "port": 3306,
+                      "protocole": "tcp",
+                      "service": "mysql",
+                      "produit": "MySQL 5.0.51a-3ubuntu5"
+                    },
+                    {
+                      "port": 5432,
+                      "protocole": "tcp",
+                      "service": "postgresql",
+                      "produit": "PostgreSQL DB 8.3.0 - 8.3.7"
+                    },
+                    {
+                      "port": 5900,
+                      "protocole": "tcp",
+                      "service": "vnc",
+                      "produit": "VNC protocol 3.3"
+                    },
+                    {
+                      "port": 6000,
+                      "protocole": "tcp",
+                      "service": "X11",
+                      "produit": ""
+                    },
+                    {
+                      "port": 6667,
+                      "protocole": "tcp",
+                      "service": "irc",
+                      "produit": "UnrealIRCd"
+                    },
+                    {
+                      "port": 8180,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Apache Tomcat/Coyote JSP engine 1.1"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "Surface d'attaque :\n- Port 21 (ftp) : vsftpd 2.3.4\n- Port 22 (ssh) : OpenSSH 4.7p1\n- Port 23 (telnet) : Linux telnetd\n- Port 25 (smtp) : Postfix smtpd\n- Port 53 (domain) : ISC BIND 9.4.2\n- Port 80 (http) : Apache httpd 2.2.8\n- Port 111 (rpcbind) : 2\n- Port 139 (netbios-ssn) : Samba smbd 3.X - 4.X\n- Port 445 (netbios-ssn) : Samba smbd 3.0.20-Debian\n- Port 512 (exec) : netkit-rsh rexecd\n- Port 513 (login) : \n- Port 514 (tcpwrapped) : \n- Port 1099 (java-rmi) : GNU Classpath grmiregistry\n- Port 1524 (bindshell) : Metasploitable root shell\n- Port 2049 (nfs) : 2-4\n- Port 3306 (mysql) : MySQL 5.0.51a-3ubuntu5\n- Port 5432 (postgresql) : PostgreSQL DB 8.3.0 - 8.3.7\n- Port 5900 (vnc) : VNC protocol 3.3\n- Port 6000 (X11) : \n- Port 6667 (irc) : UnrealIRCd\n- Port 8180 (http) : Apache Tomcat/Coyote JSP engine 1.1\n\nPar où commencer :\n1. Port 23 (telnet) et Port 512 (rexecd) : services obsolètes avec authentification par mot de passe, sans chiffrement, permettant un accès direct au shell si le port est exploitable.\n2. Port 80/8180 (HTTP/Tomcat) et Port 3306 (MySQL) : Apache 2.2.8 et MySQL 5.0 sont très vieux avec de multiples vulnérabilités connues, et Tomcat 1.1 n'est plus maintenu depuis longtemps.\n3. Port 21 (FTP vsftpd) : permet une exécution arbitraire via l'upload de fichier exploitable, surtout si le service est configuré pour permettre des connexions sans authentification.\n\nPORTS: 21,22,23,25,53,80,111,139,445,512,513,514,1099,1524,2049,3306,5432,5900,6000,6667,8180"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_07",
+          "vrais_ports": [
+            443
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque : Uniquement le port 443 (HTTPS) est ouvert, fourni par le serveur Nginx v1.24.0.\n\nPar où commencer : Attaquer via le contenu web et les headers du service HTTPS, car c'est la seule porte d'entrée accessible actuellement.\n\nPORTS: 443"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_07.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.8",
+                  "ports_ouverts": [
+                    {
+                      "port": 443,
+                      "protocole": "tcp",
+                      "service": "https",
+                      "produit": "nginx 1.24.0"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "Surface d'attaque :\n- Port 443/tcp : service https, version nginx 1.24.0\n\nPar où commencer :\nLe port 443 est HTTPS avec nginx, ce qui signifie qu'il faut sécuriser les communications cryptées et vérifier la configuration SSL/TLS de nginx pour identifier d'éventuels vulnérabilités comme des certificats obsolètes ou des configurations laxistes. C'est le seul service accessible sur cette machine et il représente l'interface principale de communication avec le serveur web.\n\nPORTS: 443"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_08",
+          "vrais_ports": [
+            22,
+            53,
+            123
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 (TCP) : SSH (OpenSSH 9.2p1)\n- Port 53 (UDP) : DNS (dnsmasq 2.89)\n- Port 123 (UDP) : NTP (NTP v4)\n\nPar où commencer :\nLe port 22 doit être exploité en priorité pour tester les configurations SSH et l'accès à distance, suivi du port 53 pour auditer la résolution DNS locale. Le service NTP est secondaire mais peut offrir des vecteurs d'attaque liés au temps système.\n\nPORTS: 22, 53, 123"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_08.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.9",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 9.2p1"
+                    },
+                    {
+                      "port": 53,
+                      "protocole": "udp",
+                      "service": "domain",
+                      "produit": "dnsmasq 2.89"
+                    },
+                    {
+                      "port": 123,
+                      "protocole": "udp",
+                      "service": "ntp",
+                      "produit": "NTP v4"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 22/tcp : SSH, OpenSSH 9.2p1\n- Port 53/udp : DNS, dnsmasq 2.89\n- Port 123/udp : NTP, NTP v4\n\n**Par où commencer :**\n1. **SSH (port 22)** : C'est le point d'accès principal pour une exploitation humaine ou automatisée, avec des vulnérabilités classiques (force brute, jailbreak).\n2. **DNS (port 53)** : Permet d'attaquer la résolution de noms, potentiellement pour l'exfiltration de données ou le tunneling.\n3. **NTP (port 123)** : Moins critique mais exploitable via des attaques de réflexion ou des problèmes de synchronisation de temps pour contourrer des mesures de sécurité.\n\nPORTS: 22,53,123"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_09",
+          "vrais_ports": [
+            2222,
+            8443,
+            9200,
+            27017
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\nPort 2222 (OpenSSH 8.4p1)\nPort 8443 (Jetty 9.4.z)\nPort 9200 (Elasticsearch REST API 7.10.2)\nPort 27017 (MongoDB 4.4.6)\n\nPar où commencer :\nCibler d'abord Elasticsearch et MongoDB (ports 9200 et 27017). Ces bases de données sont souvent exposées sans authentification par défaut sur les réseaux locaux, offrant une voie directe vers l'exfiltration de données sensibles.\n\nPORTS: 2222, 8443, 9200, 27017"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_09.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.10",
+                  "ports_ouverts": [
+                    {
+                      "port": 2222,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.4p1"
+                    },
+                    {
+                      "port": 8443,
+                      "protocole": "tcp",
+                      "service": "https-alt",
+                      "produit": "Jetty 9.4.z"
+                    },
+                    {
+                      "port": 9200,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Elasticsearch REST API 7.10.2"
+                    },
+                    {
+                      "port": 27017,
+                      "protocole": "tcp",
+                      "service": "mongodb",
+                      "produit": "MongoDB 4.4.6"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "**Surface d'attaque :**\n- Port 2222/tcp : OpenSSH 8.4p1\n- Port 8443/tcp : https-alt Jetty 9.4.z\n- Port 9200/tcp : http Elasticsearch REST API 7.10.2\n- Port 27017/tcp : mongodb MongoDB 4.4.6\n\n**Par où commencer :**\nPriorité à **MongoDB 4.4.6 sur 27017** (base de données sans auth explicite visible, risque d'extraction de données directe) puis **Elasticsearch REST API 7.10.2 sur 9200** (API publique exposée, vulnérabilités potentielles dans le plugin et gestion des index). SSH 8.4p1 reste un accès système mais secondaire si les deux services exposés n'offrent pas d'accès admin direct.\n\nPORTS: 2222,8443,9200,27017"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        },
+        {
+          "tache": "scan_10",
+          "vrais_ports": [
+            22,
+            3000
+          ],
+          "seul": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "reponse_modele": "Surface d'attaque :\n- Port 22 : SSH (OpenSSH 8.9p1)\n- Port 3000 : HTTP (Node.js Express framework)\n\nPar où commencer :\n1. Port 3000 : Vulnérabilités de sécurité sur les frameworks web Node.js.\n2. Port 22 : Audit des droits d'accès et gestion des clés SSH.\n\nPORTS: 22,3000"
+              }
+            ]
+          },
+          "systeme": {
+            "issue": "juste",
+            "inventes": 0,
+            "oublies": 0,
+            "trace": [
+              {
+                "tour": 0,
+                "outil": "lire_scan",
+                "arguments": {
+                  "chemin": "donnees/scans_bench/scan_10.xml"
+                },
+                "resultat": {
+                  "cible": "172.17.0.11",
+                  "ports_ouverts": [
+                    {
+                      "port": 22,
+                      "protocole": "tcp",
+                      "service": "ssh",
+                      "produit": "OpenSSH 8.9p1"
+                    },
+                    {
+                      "port": 3000,
+                      "protocole": "tcp",
+                      "service": "http",
+                      "produit": "Node.js Express framework"
+                    }
+                  ]
+                }
+              },
+              {
+                "tour": 1,
+                "reponse_modele": "### Surface d'attaque\n\nLe scan nmap sur la cible **172.17.0.11** révèle deux ports ouverts :\n- **Port 22/TCP** : Service SSH, produit OpenSSH 8.9p1\n- **Port 3000/TCP** : Service HTTP, produit Node.js Express framework\n\n### Par où commencer\n\nDeux axes prioritaires pour le pentest :\n1. **Port 3000 (HTTP/Node.js)** : Ce port expose une application web via Express, ce qui ouvre de nombreuses portes d'entrée classiques comme les injections XSS, SQL ou des failles de configuration HTTP. Une version récente peut aussi présenter des vulnérabilités connues dans le framework lui-même.\n2. **Port 22 (SSH/OpenSSH)** : Bien que plus rarement exploité directement, une analyse approfondie des versions et des configurations (chiffrement, authentification) peut révéler des vecteurs d'attaque potentiels sur les accès à distance.\n\nPORTS: 22, 3000"
+              },
+              {
+                "tour": 1,
+                "verification": "OK"
+              }
+            ]
+          }
+        }
+      ],
+      "resume": {
+        "seul": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        },
+        "systeme": {
+          "taux_juste": 1.0,
+          "taux_fausse": 0.0,
+          "taux_rejetee": 0.0,
+          "ports_inventes": 0
+        }
+      }
+    }
+  ],
+  "tableau": "| Mesure | Qwen seul | Mon système |\n|---|---|---|\n| Réponses justes (taux) | 1.00 ± 0.00 | 1.00 ± 0.00 |\n| Réponses FAUSSES montrées (taux) | 0.00 ± 0.00 | 0.00 ± 0.00 |\n| Réponses rejetées (taux) | 0.00 ± 0.00 | 0.00 ± 0.00 |\n| Ports inventés (total par lancement) | 0.00 ± 0.00 | 0.00 ± 0.00 |"
+}

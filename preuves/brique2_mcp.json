@@ -1,0 +1,85 @@
+{
+  "statut": "validee",
+  "reponse": "Surface d'attaque : \n- Port 2222/tcp : SSH, OpenSSH 8.4p1\n- Port 8443/tcp : HTTPS alternatif, Jetty 9.4.z  \n- Port 9200/tcp : HTTP, Elasticsearch REST API 7.10.2\n- Port 27017/tcp : MongoDB, MongoDB 4.4.6\n\nPar où commencer : \nMongoDB (27017) et Elasticsearch (9200) sont les cibles prioritaires car ce sont des bases de données sensibles exposées directement sans authentification visible. MongoDB peut contenir des données critiques stockées par défaut en mode non sécurisé, tandis que Elasticsearch expose un moteur de recherche complet avec des configurations d'indexation souvent négligées. SSH (2222) mérite attention pour vérifier les configurations d'authentification mais est secondaire face aux données directement accessibles via les bases de données.\n\nPORTS: 2222, 8443, 9200, 27017",
+  "problemes": [],
+  "scan": {
+    "cible": "172.17.0.10",
+    "ports_ouverts": [
+      {
+        "port": 2222,
+        "protocole": "tcp",
+        "service": "ssh",
+        "produit": "OpenSSH 8.4p1"
+      },
+      {
+        "port": 8443,
+        "protocole": "tcp",
+        "service": "https-alt",
+        "produit": "Jetty 9.4.z"
+      },
+      {
+        "port": 9200,
+        "protocole": "tcp",
+        "service": "http",
+        "produit": "Elasticsearch REST API 7.10.2"
+      },
+      {
+        "port": 27017,
+        "protocole": "tcp",
+        "service": "mongodb",
+        "produit": "MongoDB 4.4.6"
+      }
+    ]
+  },
+  "trace": [
+    {
+      "tour": 0,
+      "outil": "lire_scan",
+      "arguments": {
+        "chemin": "donnees/scans_bench/scan_09.xml"
+      },
+      "resultat": {
+        "cible": "172.17.0.10",
+        "ports_ouverts": [
+          {
+            "port": 2222,
+            "protocole": "tcp",
+            "service": "ssh",
+            "produit": "OpenSSH 8.4p1"
+          },
+          {
+            "port": 8443,
+            "protocole": "tcp",
+            "service": "https-alt",
+            "produit": "Jetty 9.4.z"
+          },
+          {
+            "port": 9200,
+            "protocole": "tcp",
+            "service": "http",
+            "produit": "Elasticsearch REST API 7.10.2"
+          },
+          {
+            "port": 27017,
+            "protocole": "tcp",
+            "service": "mongodb",
+            "produit": "MongoDB 4.4.6"
+          }
+        ]
+      }
+    },
+    {
+      "tour": 1,
+      "reponse_modele": "Surface d'attaque : \n- Port 2222/tcp : SSH, OpenSSH 8.4p1\n- Port 8443/tcp : HTTPS alternatif, Jetty 9.4.z  \n- Port 9200/tcp : HTTP, Elasticsearch REST API 7.10.2\n- Port 27017/tcp : MongoDB, MongoDB 4.4.6\n\nPar où commencer : \nMongoDB (27017) et Elasticsearch (9200) sont les cibles prioritaires car ce sont des bases de données sensibles exposées directement sans authentification visible. MongoDB peut contenir des données critiques stockées par défaut en mode non sécurisé, tandis que Elasticsearch expose un moteur de recherche complet avec des configurations d'indexation souvent négligées. SSH (2222) mérite attention pour vérifier les configurations d'authentification mais est secondaire face aux données directement accessibles via les bases de données.\n\nPORTS: 2222, 8443, 9200, 27017"
+    },
+    {
+      "tour": 1,
+      "verification": "OK"
+    }
+  ],
+  "tokens": {
+    "prompt": 1328,
+    "reponse": 586,
+    "memoire_estimee": 0
+  }
+}

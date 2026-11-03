@@ -1,0 +1,74 @@
+{
+  "statut": "validee",
+  "reponse": "**Surface d'attaque :**\n- Port 21/TCP : FTP (vsftpd 2.3.4)\n- Port 22/TCP : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- Port 80/TCP : HTTP (Apache httpd 2.2.8)\n\n**Par où commencer :**\n1. **SSH (port 22)** – Version OpenSSH 4.7p1 est extrêmement ancienne et comporte de nombreuses vulnérabilités connues exploitables à distance. C'est la porte d'entrée principale pour une connexion non intrusive.\n2. **FTP (port 21)** – vsftpd 2.3.4 date de 2010, avec des problèmes majeurs d'authentification et risque élevé de compromission via bruteforce.\n3. **HTTP (port 80)** – Apache 2.2.8 est ancien mais moins critique ; intéressant pour l'énumération de fichiers ou injection si présence de paramètres web vulnérables.\n\nPORTS: 21, 22, 80",
+  "problemes": [],
+  "scan": {
+    "cible": "172.17.0.6",
+    "ports_ouverts": [
+      {
+        "port": 21,
+        "protocole": "tcp",
+        "service": "ftp",
+        "produit": "vsftpd 2.3.4"
+      },
+      {
+        "port": 22,
+        "protocole": "tcp",
+        "service": "ssh",
+        "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+      },
+      {
+        "port": 80,
+        "protocole": "tcp",
+        "service": "http",
+        "produit": "Apache httpd 2.2.8"
+      }
+    ]
+  },
+  "trace": [
+    {
+      "tour": 0,
+      "outil": "lire_scan",
+      "arguments": {
+        "chemin": "donnees/scans_bench/scan_05.xml"
+      },
+      "resultat": {
+        "cible": "172.17.0.6",
+        "ports_ouverts": [
+          {
+            "port": 21,
+            "protocole": "tcp",
+            "service": "ftp",
+            "produit": "vsftpd 2.3.4"
+          },
+          {
+            "port": 22,
+            "protocole": "tcp",
+            "service": "ssh",
+            "produit": "OpenSSH 4.7p1 Debian 8ubuntu1"
+          },
+          {
+            "port": 80,
+            "protocole": "tcp",
+            "service": "http",
+            "produit": "Apache httpd 2.2.8"
+          }
+        ],
+        "souvenir": "Analyse précédente de 172.17.0.6 le 2026-11-03T23:25:37 : ports ouverts [21, 22, 80]. Signale les ports apparus ou disparus depuis."
+      }
+    },
+    {
+      "tour": 1,
+      "reponse_modele": "**Surface d'attaque :**\n- Port 21/TCP : FTP (vsftpd 2.3.4)\n- Port 22/TCP : SSH (OpenSSH 4.7p1 Debian 8ubuntu1)\n- Port 80/TCP : HTTP (Apache httpd 2.2.8)\n\n**Par où commencer :**\n1. **SSH (port 22)** – Version OpenSSH 4.7p1 est extrêmement ancienne et comporte de nombreuses vulnérabilités connues exploitables à distance. C'est la porte d'entrée principale pour une connexion non intrusive.\n2. **FTP (port 21)** – vsftpd 2.3.4 date de 2010, avec des problèmes majeurs d'authentification et risque élevé de compromission via bruteforce.\n3. **HTTP (port 80)** – Apache 2.2.8 est ancien mais moins critique ; intéressant pour l'énumération de fichiers ou injection si présence de paramètres web vulnérables.\n\nPORTS: 21, 22, 80"
+    },
+    {
+      "tour": 1,
+      "verification": "OK"
+    }
+  ],
+  "tokens": {
+    "prompt": 1437,
+    "reponse": 716,
+    "memoire_estimee": 32
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "statut": "validee",
+  "reponse": "**Surface d'attaque :**\n- Port 135/tcp : msrpc, Microsoft Windows RPC (version non spécifiée)\n- Port 445/tcp : microsoft-ds, version non spécifiée\n\n**Par où commencer :**\n1. **Port 445 (Microsoft DS)** : Prioritaire car c'est le service SMB/CIFS directement exploitable pour l'évasion de conteneurs et l'accès aux fichiers partagés. C'est aussi la porte d'entrée classique des outils comme bloodhound.\n2. **Port 135 (Windows RPC)** : À creuser après si besoin, car il peut servir à la découverte des services Windows et à certains types d'injections d'exploits via les processus distants.\n\nPORTS: 135,445",
+  "problemes": [],
+  "scan": {
+    "cible": "127.0.0.1",
+    "ports_ouverts": [
+      {
+        "port": 135,
+        "protocole": "tcp",
+        "service": "msrpc",
+        "produit": "Microsoft Windows RPC"
+      },
+      {
+        "port": 445,
+        "protocole": "tcp",
+        "service": "microsoft-ds",
+        "produit": ""
+      }
+    ]
+  },
+  "trace": [
+    {
+      "tour": 0,
+      "outil": "lancer_scan",
+      "arguments": {
+        "cible": "127.0.0.1"
+      },
+      "resultat": {
+        "cible": "127.0.0.1",
+        "ports_ouverts": [
+          {
+            "port": 135,
+            "protocole": "tcp",
+            "service": "msrpc",
+            "produit": "Microsoft Windows RPC"
+          },
+          {
+            "port": 445,
+            "protocole": "tcp",
+            "service": "microsoft-ds",
+            "produit": ""
+          }
+        ]
+      }
+    },
+    {
+      "tour": 1,
+      "reponse_modele": "**Surface d'attaque :**\n- Port 135/tcp : msrpc, Microsoft Windows RPC (version non spécifiée)\n- Port 445/tcp : microsoft-ds, version non spécifiée\n\n**Par où commencer :**\n1. **Port 445 (Microsoft DS)** : Prioritaire car c'est le service SMB/CIFS directement exploitable pour l'évasion de conteneurs et l'accès aux fichiers partagés. C'est aussi la porte d'entrée classique des outils comme bloodhound.\n2. **Port 135 (Windows RPC)** : À creuser après si besoin, car il peut servir à la découverte des services Windows et à certains types d'injections d'exploits via les processus distants.\n\nPORTS: 135,445"
+    },
+    {
+      "tour": 1,
+      "verification": "OK"
+    }
+  ],
+  "tokens": {
+    "prompt": 1320,
+    "reponse": 555,
+    "memoire_estimee": 0
+  }
+}

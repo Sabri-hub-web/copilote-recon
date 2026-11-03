@@ -37,4 +37,7 @@ l'étiquette `[GARDE-FOU]` ; distinction ajoutée entre `[GARDE-FOU]` (refus) et
 
 **Benchmark.** Série facile : 100 % de réponses justes pour les deux, effet plafond.
 Décision : garder ce résultat et ajouter une série difficile (scan_11 à scan_20).
-[À COMPLÉTER : résultat de la série difficile]
+Série difficile : Qwen seul 0 % juste, mon système 100 %. Diagnostic sur les traces (script
+écrit avec Claude, lu et lancé par moi) : 28 réponses sur 30 de Qwen seul sont vides, parce que
+prompt + réflexion remplissent les 8 192 tokens du contexte. Mon système a corrigé 6 réponses
+de Qwen, dont un port 3389 inventé (scan_12).
