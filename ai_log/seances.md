@@ -25,5 +25,16 @@ tests, le README et la structure de EVIDENCE.md.
 
 ## Séance 2 — 3 novembre 2026 — installation, lancement sur Qwen, compréhension
 
-[À COMPLÉTER : installation sur ma tour, premiers lancements réels, résultats du benchmark,
-ce que j'ai modifié après avoir vu les vraies réponses de Qwen]
+**Installation.** Ollama et nmap installés sur D: (disque C: plein). Qwen tourne à 100 % GPU,
+contexte 8192. 51 tests passent sous Windows.
+
+**Premiers vrais lancements.** Analyse de scan_01 validée. « Scanne 8.8.8.8 » refusé par le
+garde-fou ; Qwen a ensuite essayé 127.0.0.1 de lui-même (autorisé). Scan réel de ma machine :
+ports 135 et 445, ports justes, mais conseil faux (« évasion de conteneurs » pour SMB).
+
+**Corrigé à la main.** `__main__.py` : l'erreur « nmap n'est pas installé » s'affichait avec
+l'étiquette `[GARDE-FOU]` ; distinction ajoutée entre `[GARDE-FOU]` (refus) et `[ERREUR OUTIL]`.
+
+**Benchmark.** Série facile : 100 % de réponses justes pour les deux, effet plafond.
+Décision : garder ce résultat et ajouter une série difficile (scan_11 à scan_20).
+[À COMPLÉTER : résultat de la série difficile]

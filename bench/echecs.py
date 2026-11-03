@@ -19,5 +19,6 @@ for lancement in donnees["lancements"]:
             print(f"Lancement {lancement['numero']} | {d['tache']} | {qui} | issue = {d[qui]['issue']}"
                   f" | inventés = {d[qui]['inventes']} | oubliés = {d[qui]['oublies']}")
             print(f"Vrais ports : {d['vrais_ports']}")
+            print(f"Tokens : {d[qui].get('tokens')}")
             for etape in d[qui]["trace"]:
                 print("  -", json.dumps(etape, ensure_ascii=False)[:600])

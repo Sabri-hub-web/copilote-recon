@@ -108,23 +108,44 @@ python -m copilote "Analyse le scan donnees/scans_bench/scan_05.xml"   # se souv
 ## Brique 9 — Comparaison mesurée
 
 **Protocole.**
-- 10 tâches à réponse connue : `donnees/scans_bench/scan_01..10.xml`, réponses dans
-  `bench/taches.json`, écrites à la main dans `donnees/generer_scans.py`. Les scans
-  contiennent des pièges : ports `closed`, `filtered`, `open|filtered`, SSH sur 2222,
-  un scan à 20 ports ouverts.
+- Deux séries de 10 tâches à réponse connue, générées par `donnees/generer_scans.py`
+  (la vérité est écrite par ce script, pas par `lire_scan`) :
+  - **facile** (`scan_01` à `scan_10`, `bench/taches.json`) : 2 à 20 ports ouverts, quelques
+    pièges (`closed`, `filtered`, `open|filtered`, SSH sur 2222) ;
+  - **difficile** (`scan_11` à `scan_20`, `bench/taches_difficiles.json`) : 30 à 46 ports ouverts,
+    25 leurres TCP, et des numéros présents à la fois en TCP `closed` et en UDP `open` ou
+    `open|filtered`.
 - **Qwen seul** : le XML brut est collé dans le prompt, la réponse est prise telle quelle.
 - **Mon système** : Qwen + outil + vérification + une correction.
-- Même modèle, température 0.7, **3 lancements** chacun, moyenne ± écart-type.
+- Même modèle, contexte 8192, température 0.7, **3 lancements** chacun, moyenne ± écart-type.
 - Une réponse est « juste » si sa ligne `PORTS:` donne exactement les ports ouverts.
   Mesure principale : le taux de réponses **fausses montrées à l'utilisateur**.
 
 **Reproduire.**
 ```bash
-python bench/comparer.py
-python bench/echecs.py resultats/bench_XXXX.json
+python bench/comparer.py                      # série facile
+python bench/comparer.py --serie difficile    # série difficile
+python bench/echecs.py resultats/bench_<serie>_XXXX.json
 ```
 
-**Résultats.** [À REMPLIR : coller le tableau affiché par comparer.py]
+### Résultat 1 — série facile (3 novembre 2026, `resultats/bench_20261103_162008.json`)
+
+| Mesure | Qwen seul | Mon système |
+|---|---|---|
+| Réponses justes (taux) | 1.00 ± 0.00 | 1.00 ± 0.00 |
+| Réponses FAUSSES montrées (taux) | 0.00 ± 0.00 | 0.00 ± 0.00 |
+| Réponses rejetées (taux) | 0.00 ± 0.00 | 0.00 ± 0.00 |
+| Ports inventés (total par lancement) | 0.00 ± 0.00 | 0.00 ± 0.00 |
+
+**Lecture : effet plafond.** Sur ces 10 scans, Qwen seul ne se trompe jamais : le benchmark
+est trop facile pour séparer les deux systèmes, et ne permet pas de conclure que mon système
+apporte quelque chose. Je garde ce résultat tel quel et j'ai construit la série difficile
+pour tester là où un petit modèle a des chances de se tromper (beaucoup de ports, contexte
+long, pièges TCP/UDP).
+
+### Résultat 2 — série difficile
+
+[À REMPLIR : coller le tableau affiché par `python bench/comparer.py --serie difficile`]
 
 | Mesure | Qwen seul | Mon système |
 |---|---|---|
@@ -135,9 +156,14 @@ python bench/echecs.py resultats/bench_XXXX.json
 
 **Un échec expliqué à partir de sa trace.** [À REMPLIR avec `bench/echecs.py`] :
 quelle tâche, quel lancement, ce que le modèle a répondu, pourquoi c'est faux
-(ex. un port `closed` compté comme ouvert), et ce que mon système a fait.
+(port `closed` compté comme ouvert ? port oublié dans une longue liste ? confusion TCP/UDP ?
+prompt tronqué : regarder `tokens.prompt` par rapport à 8192), et ce que mon système a fait.
 
-**Ce que ces chiffres ne permettent pas de conclure.** Avec 10 tâches et 3 lancements,
-l'écart-type est grossier. Les scans sont synthétiques (format nmap réel, contenu
-construit) : rien ne garantit les mêmes taux sur de vrais réseaux. On mesure la fidélité
-des ports, pas la qualité des conseils de pentest.
+**Ce que ces chiffres ne permettent pas de conclure.** Avec 10 tâches par série et
+3 lancements, l'écart-type est grossier. Les scans sont synthétiques (format nmap réel,
+contenu construit) : rien ne garantit les mêmes taux sur de vrais réseaux. J'ai ajouté la
+série difficile **après** avoir vu le résultat de la série facile : les deux résultats sont
+rapportés, mais la série difficile a été conçue pour être dure. On mesure la fidélité des
+ports, pas la qualité des conseils : sur un vrai scan de ma machine, Qwen a cité des ports
+justes mais un conseil hors sujet (« évasion de conteneurs » pour SMB), que mon vérificateur
+ne détecte pas.

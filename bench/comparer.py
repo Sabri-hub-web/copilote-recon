@@ -5,7 +5,8 @@
   - on calcule moyenne et écart-type (dispersion) de chaque mesure
   - toutes les traces sont gardées pour expliquer un échec
 
-    python bench/comparer.py                 (3 lancements, 10 tâches)
+    python bench/comparer.py                         (série facile : 3 lancements, 10 tâches)
+    python bench/comparer.py --serie difficile       (série difficile : scan_11 à scan_20)
     python bench/comparer.py --lancements 1 --taches 3   (essai rapide)
 """
 import argparse
@@ -22,7 +23,9 @@ from copilote.agent import analyser, modele_seul
 from copilote.garde_fous import extraire_ligne_ports
 from copilote.llm import ClientLLM
 
-TACHES = Path(__file__).resolve().parent / "taches.json"
+DOSSIER_BENCH = Path(__file__).resolve().parent
+SERIES = {"facile": DOSSIER_BENCH / "taches.json",
+          "difficile": DOSSIER_BENCH / "taches_difficiles.json"}
 
 
 def noter(resultat: dict, vrais_ports: list) -> dict:
@@ -64,12 +67,13 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--lancements", type=int, default=3)
     p.add_argument("--taches", type=int, default=10)
+    p.add_argument("--serie", choices=list(SERIES), default="facile")
     args = p.parse_args()
 
-    taches = json.loads(TACHES.read_text(encoding="utf-8"))[: args.taches]
+    taches = json.loads(SERIES[args.serie].read_text(encoding="utf-8"))[: args.taches]
     llm = ClientLLM()
-    tout = {"modele": llm.modele, "date": datetime.now().isoformat(timespec="seconds"),
-            "lancements": []}
+    tout = {"modele": llm.modele, "serie": args.serie,
+            "date": datetime.now().isoformat(timespec="seconds"), "lancements": []}
     resumes = {"seul": [], "systeme": []}
 
     for n in range(args.lancements):
@@ -84,8 +88,8 @@ def main():
             notes["seul"].append(n_seul)
             notes["systeme"].append(n_sys)
             details.append({"tache": t["id"], "vrais_ports": t["ports_ouverts"],
-                            "seul": {**n_seul, "trace": r_seul["trace"]},
-                            "systeme": {**n_sys, "trace": r_sys["trace"]}})
+                            "seul": {**n_seul, "tokens": r_seul["tokens"], "trace": r_seul["trace"]},
+                            "systeme": {**n_sys, "tokens": r_sys["tokens"], "trace": r_sys["trace"]}})
         for qui in ("seul", "systeme"):
             resumes[qui].append(resumer(notes[qui]))
         tout["lancements"].append({"numero": n + 1, "details": details,
@@ -104,9 +108,10 @@ def main():
 
     dossier = config.RACINE / "resultats"
     dossier.mkdir(exist_ok=True)
-    fichier = dossier / f"bench_{datetime.now():%Y%m%d_%H%M%S}.json"
+    fichier = dossier / f"bench_{args.serie}_{datetime.now():%Y%m%d_%H%M%S}.json"
     fichier.write_text(json.dumps(tout, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"\n{len(taches)} tâches × {args.lancements} lancements — modèle {llm.modele}\n")
+    print(f"\nSérie {args.serie} : {len(taches)} tâches × {args.lancements} lancements"
+          f" — modèle {llm.modele}\n")
     print(tableau)
     print(f"\nDétails et traces : {fichier}")
     print("Pour voir les échecs : python bench/echecs.py " + str(fichier.relative_to(config.RACINE)))

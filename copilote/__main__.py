@@ -37,7 +37,8 @@ def main():
     for etape in resultat["trace"]:
         erreur = isinstance(etape.get("resultat"), dict) and etape["resultat"].get("erreur")
         if erreur:
-            print(f"[GARDE-FOU] {etape['outil']}({etape['arguments']}) -> {erreur}")
+            etiquette = "[GARDE-FOU]" if "REFUSÉ" in erreur else "[ERREUR OUTIL]"
+            print(f"{etiquette} {etape['outil']}({etape['arguments']}) -> {erreur}")
     if resultat["statut"] == "validee":
         print("RÉPONSE VÉRIFIÉE\n")
         print(resultat["reponse"])

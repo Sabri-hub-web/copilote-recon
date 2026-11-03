@@ -1,4 +1,7 @@
-"""Génère les 10 scans du benchmark (brique 9) ET leurs bonnes réponses.
+"""Génère les 20 scans du benchmark (brique 9) ET leurs bonnes réponses.
+
+  - série facile    : scan_01 à scan_10  -> bench/taches.json
+  - série difficile : scan_11 à scan_20  -> bench/taches_difficiles.json
 
 Pourquoi des scans générés ? Pour la brique 9, il faut des tâches dont on
 CONNAÎT la réponse. Ici, la vérité (les ports ouverts) est écrite à la main
@@ -107,6 +110,67 @@ MACHINES = {
 }
 
 
+# ---------------------------------------------------------------------------
+# SÉRIE DIFFICILE (scan_11 à scan_20)
+# Ajoutée après le premier benchmark : sur les 10 premiers scans, Qwen seul
+# avait déjà 100 % de réponses justes (effet plafond). Ici : 30 à 45 ports
+# ouverts, beaucoup de leurres, et des numéros présents en TCP "closed" ET en
+# UDP "open" (ou l'inverse). La vérité reste écrite par ce script, pas par lire_scan.
+# ---------------------------------------------------------------------------
+CATALOGUE = [  # (port, service, produit, version)
+    (21, "ftp", "vsftpd", "3.0.3"), (22, "ssh", "OpenSSH", "8.2p1"), (23, "telnet", "Linux telnetd", ""),
+    (25, "smtp", "Postfix smtpd", ""), (53, "domain", "ISC BIND", "9.16.1"), (69, "tftp", "", ""),
+    (80, "http", "Apache httpd", "2.4.41"), (81, "http", "nginx", "1.14.0"), (88, "kerberos-sec", "Microsoft Windows Kerberos", ""),
+    (110, "pop3", "Dovecot pop3d", ""), (111, "rpcbind", "", "2-4"), (119, "nntp", "INN", ""),
+    (123, "ntp", "NTP", "v4"), (135, "msrpc", "Microsoft Windows RPC", ""), (137, "netbios-ns", "", ""),
+    (139, "netbios-ssn", "Samba smbd", "4.6.2"), (143, "imap", "Dovecot imapd", ""), (161, "snmp", "net-snmp", "5.7.3"),
+    (179, "bgp", "", ""), (389, "ldap", "OpenLDAP", "2.4.57"), (443, "https", "Apache httpd", "2.4.41"),
+    (445, "microsoft-ds", "Samba smbd", "4.6.2"), (465, "smtps", "Postfix smtpd", ""), (500, "isakmp", "", ""),
+    (514, "syslog", "", ""), (515, "printer", "", ""), (548, "afp", "Netatalk", "3.1.12"),
+    (554, "rtsp", "", ""), (587, "submission", "Postfix smtpd", ""), (631, "ipp", "CUPS", "2.3"),
+    (636, "ldapssl", "OpenLDAP", ""), (873, "rsync", "", "protocol 31"), (993, "imaps", "Dovecot imapd", ""),
+    (995, "pop3s", "Dovecot pop3d", ""), (1080, "socks5", "", ""), (1194, "openvpn", "OpenVPN", ""),
+    (1433, "ms-sql-s", "Microsoft SQL Server 2017", "14.00.1000"), (1521, "oracle-tns", "Oracle TNS listener", "11.2.0.2.0"),
+    (1723, "pptp", "", ""), (1883, "mqtt", "Mosquitto", "1.6.9"), (2049, "nfs", "", "3-4"),
+    (2375, "docker", "Docker", "20.10.7"), (2379, "etcd-client", "etcd", "3.4.13"), (3000, "http", "Grafana", "7.5.2"),
+    (3128, "http-proxy", "Squid http proxy", "4.10"), (3306, "mysql", "MySQL", "5.7.33"), (3389, "ms-wbt-server", "xrdp", ""),
+    (3690, "svn", "Subversion", ""), (4369, "epmd", "Erlang Port Mapper Daemon", ""), (5000, "http", "Werkzeug httpd", "1.0.1"),
+    (5060, "sip", "Asterisk", "16.2.1"), (5432, "postgresql", "PostgreSQL DB", "12.5"), (5601, "http", "Kibana", "7.10.2"),
+    (5672, "amqp", "RabbitMQ", "3.8.9"), (5900, "vnc", "VNC", "protocol 3.8"), (5985, "http", "Microsoft HTTPAPI httpd", "2.0"),
+    (6379, "redis", "Redis key-value store", "6.0.9"), (6443, "https", "Kubernetes API", ""), (7001, "http", "Oracle WebLogic", "12.2.1.3"),
+    (8000, "http", "SimpleHTTPServer", "0.6"), (8008, "http", "", ""), (8080, "http-proxy", "Jenkins", "2.263.1"),
+    (8081, "http", "Nexus Repository Manager", "3.29"), (8086, "http", "InfluxDB", "1.8.3"), (8443, "https-alt", "", ""),
+    (8888, "http", "Jupyter Notebook", "6.1.5"), (9000, "http", "SonarQube", "8.6"), (9090, "http", "Prometheus", "2.24.0"),
+    (9092, "kafka", "Apache Kafka", ""), (9100, "jetdirect", "", ""), (9200, "http", "Elasticsearch REST API", "7.10.2"),
+    (9418, "git", "", ""), (10000, "http", "MiniServ (Webmin httpd)", "1.962"), (11211, "memcache", "Memcached", "1.6.9"),
+    (15672, "http", "RabbitMQ management", ""), (27017, "mongodb", "MongoDB", "4.4.3"), (50000, "http", "Jenkins agent", ""),
+]
+PORTS_UDP = [53, 69, 123, 137, 161, 500, 514, 1194, 1900, 5060, 5353]
+
+
+def machines_difficiles():
+    import random
+    machines = {}
+    for i in range(11, 21):
+        hasard = random.Random(i)          # graine fixe : toujours les mêmes scans
+        melange = hasard.sample(CATALOGUE, len(CATALOGUE))
+        n_ouverts = hasard.randint(30, 45)
+        ports = []
+        for port, service, produit, version in melange[:n_ouverts]:
+            ports.append((port, "tcp", "open", service, produit, version))
+        for port, service, _, _ in melange[n_ouverts:n_ouverts + 25]:   # leurres TCP
+            ports.append((port, "tcp", hasard.choice(["closed", "filtered"]), service, "", ""))
+        for port in hasard.sample(PORTS_UDP, 5):                         # UDP : 2 ouverts, 3 ambigus
+            etat = "open" if len([p for p in ports if p[1] == "udp" and p[2] == "open"]) < 2 \
+                else "open|filtered"
+            if not any(p[0] == port and p[1] == "tcp" for p in ports):  # même numéro en TCP fermé
+                ports.append((port, "tcp", "closed", "inconnu", "", ""))
+            ports.append((port, "udp", etat, "inconnu", "", ""))
+        ports.sort(key=lambda p: (p[1], p[0]))   # nmap trie par protocole puis par port
+        machines[f"scan_{i}"] = (f"172.18.0.{i}", ports)
+    return machines
+
+
 def xml_du_scan(ip, ports):
     """Écrit un XML au même format que 'nmap -sV -oX'."""
     lignes = []
@@ -138,20 +202,26 @@ def xml_du_scan(ip, ports):
 """
 
 
-def main():
+def ecrire(machines, fichier_taches):
     SORTIE_XML.mkdir(parents=True, exist_ok=True)
     taches = []
-    for nom, (ip, ports) in MACHINES.items():
+    for nom, (ip, ports) in machines.items():
         (SORTIE_XML / f"{nom}.xml").write_text(xml_du_scan(ip, ports), encoding="utf-8")
         taches.append({
             "id": nom,
             "fichier": f"donnees/scans_bench/{nom}.xml",
             # LA BONNE RÉPONSE : uniquement les ports dont l'état est exactement "open"
-            "ports_ouverts": sorted(p[0] for p in ports if p[2] == "open"),
+            # (set : un même numéro ouvert en TCP et en UDP ne compte qu'une fois)
+            "ports_ouverts": sorted({p[0] for p in ports if p[2] == "open"}),
         })
-    SORTIE_TACHES.parent.mkdir(exist_ok=True)
-    SORTIE_TACHES.write_text(json.dumps(taches, indent=2), encoding="utf-8")
-    print(f"{len(taches)} scans écrits dans {SORTIE_XML} et réponses dans {SORTIE_TACHES}")
+    fichier_taches.parent.mkdir(exist_ok=True)
+    fichier_taches.write_text(json.dumps(taches, indent=2), encoding="utf-8")
+    print(f"{len(taches)} scans écrits dans {SORTIE_XML} et réponses dans {fichier_taches}")
+
+
+def main():
+    ecrire(MACHINES, SORTIE_TACHES)                                   # série facile
+    ecrire(machines_difficiles(), SORTIE_TACHES.with_name("taches_difficiles.json"))
 
 
 if __name__ == "__main__":

@@ -7,8 +7,9 @@ import pytest
 from copilote import config
 from copilote.outils_nmap import lire_scan
 
-TACHES = json.loads((Path(__file__).resolve().parent.parent / "bench" / "taches.json")
-                    .read_text(encoding="utf-8"))
+BENCH = Path(__file__).resolve().parent.parent / "bench"
+TACHES = [t for f in ("taches.json", "taches_difficiles.json")
+          for t in json.loads((BENCH / f).read_text(encoding="utf-8"))]
 
 
 def test_scan_simple(scan_01):
@@ -26,10 +27,11 @@ def test_open_filtered_ne_compte_pas():
 
 
 @pytest.mark.parametrize("tache", TACHES, ids=[t["id"] for t in TACHES])
-def test_les_10_scans_du_bench(tache):
+def test_les_20_scans_du_bench(tache):
     # La vérité de taches.json a été écrite à la main (generer_scans.py) :
     # si lire_scan se trompe sur un seul scan, ce test échoue.
-    ports = [p["port"] for p in lire_scan(tache["fichier"])["ports_ouverts"]]
+    # sorted(set(...)) : un numéro ouvert en TCP ET en UDP n'apparaît qu'une fois dans la vérité
+    ports = sorted({p["port"] for p in lire_scan(tache["fichier"])["ports_ouverts"]})
     assert ports == tache["ports_ouverts"]
 
 

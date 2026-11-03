@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="nmap -sV -sU -sS -oX scan.xml 172.18.0.11" start="1762100000" version="7.94" xmloutputversion="1.05">
+<scaninfo type="syn" protocol="tcp" numservices="1000" services="1-1000"/>
+<host starttime="1762100000" endtime="1762100042"><status state="up" reason="arp-response" reason_ttl="0"/>
+<address addr="172.18.0.11" addrtype="ipv4"/>
+<hostnames></hostnames>
+<ports><extraports state="closed" count="927"><extrareasons reason="reset" count="927"/></extraports>
+<port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="ftp" product="vsftpd" version="3.0.3" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="ssh" product="OpenSSH" version="8.2p1" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="telnet" product="Linux telnetd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="25"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="smtp" product="Postfix smtpd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="53"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="domain" product="ISC BIND" version="9.16.1" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="69"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="tftp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="80"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="http" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="81"><state state="closed" reason="reset" reason_ttl="64"/><service name="http" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="88"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="kerberos-sec" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="110"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="pop3" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="111"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="rpcbind" version="2-4" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="123"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="ntp" product="NTP" version="v4" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="135"><state state="closed" reason="reset" reason_ttl="64"/><service name="msrpc" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="137"><state state="closed" reason="reset" reason_ttl="64"/><service name="netbios-ns" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="139"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="netbios-ssn" product="Samba smbd" version="4.6.2" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="143"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="imap" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="161"><state state="closed" reason="reset" reason_ttl="64"/><service name="snmp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="179"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="bgp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="https" product="Apache httpd" version="2.4.41" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="445"><state state="closed" reason="reset" reason_ttl="64"/><service name="microsoft-ds" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="465"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="smtps" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="500"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="isakmp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="514"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="syslog" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="515"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="printer" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="548"><state state="closed" reason="reset" reason_ttl="64"/><service name="afp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="554"><state state="closed" reason="reset" reason_ttl="64"/><service name="rtsp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="587"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="submission" product="Postfix smtpd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="631"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="ipp" product="CUPS" version="2.3" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="993"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="imaps" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="995"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="pop3s" product="Dovecot pop3d" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="1080"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="socks5" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="1433"><state state="closed" reason="reset" reason_ttl="64"/><service name="ms-sql-s" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="1521"><state state="closed" reason="reset" reason_ttl="64"/><service name="oracle-tns" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="1723"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="pptp" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="1883"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="mqtt" product="Mosquitto" version="1.6.9" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="2049"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="nfs" version="3-4" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="2375"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="docker" product="Docker" version="20.10.7" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="2379"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="etcd-client" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="3128"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http-proxy" product="Squid http proxy" version="4.10" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="3306"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="mysql" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="3389"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="ms-wbt-server" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="3690"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="svn" product="Subversion" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="4369"><state state="closed" reason="reset" reason_ttl="64"/><service name="epmd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5000"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="http" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5060"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="sip" product="Asterisk" version="16.2.1" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5353"><state state="closed" reason="reset" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5432"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="postgresql" product="PostgreSQL DB" version="12.5" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5601"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Kibana" version="7.10.2" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5672"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="amqp" product="RabbitMQ" version="3.8.9" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5985"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Microsoft HTTPAPI httpd" version="2.0" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="6379"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="redis" product="Redis key-value store" version="6.0.9" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="6443"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="https" product="Kubernetes API" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8000"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="SimpleHTTPServer" version="0.6" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8008"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8080"><state state="closed" reason="reset" reason_ttl="64"/><service name="http-proxy" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8086"><state state="closed" reason="reset" reason_ttl="64"/><service name="http" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8443"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="https-alt" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="8888"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Jupyter Notebook" version="6.1.5" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9000"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="SonarQube" version="8.6" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9092"><state state="closed" reason="reset" reason_ttl="64"/><service name="kafka" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9100"><state state="filtered" reason="no-response" reason_ttl="64"/><service name="jetdirect" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9200"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Elasticsearch REST API" version="7.10.2" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9418"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="git" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="10000"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="MiniServ (Webmin httpd)" version="1.962" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="11211"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="memcache" product="Memcached" version="1.6.9" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="15672"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="RabbitMQ management" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="27017"><state state="closed" reason="reset" reason_ttl="64"/><service name="mongodb" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="50000"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Jenkins agent" method="probed" conf="10"/></port>
+<port protocol="udp" portid="69"><state state="open|filtered" reason="no-response" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+<port protocol="udp" portid="137"><state state="open|filtered" reason="no-response" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+<port protocol="udp" portid="514"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+<port protocol="udp" portid="5060"><state state="open|filtered" reason="no-response" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+<port protocol="udp" portid="5353"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="inconnu" method="probed" conf="10"/></port>
+</ports>
+</host>
+<runstats><finished time="1762100042" elapsed="42.00" exit="success"/><hosts up="1" down="0" total="1"/></runstats>
+</nmaprun>
